@@ -195,58 +195,61 @@ public class ShieldListener implements Listener {
 									pow--;
 									shield.setShieldPower(pow);
 											
-									if (pow <= 0)
+									if (pow <= 0) {
 										TNTBreakShield(ShieldBlock);
+										return;
+									}
 									if (pow > 0){
 										String newpower = String.valueOf(pow);
-									s.setLine(3, newpower);
-									s.update();
-									shield.owner.sendMessage("Shield Power at " + newpower + "!");
-								}
-								else
-									TNTBreakShield(ShieldBlock);
+										s.setLine(3, newpower);
+										s.update();
+										shield.owner.sendMessage("Shield Power at " + newpower + "!");
 
-									if (ShieldDurability.containsKey(representation)) {
-										int currentDurability = (int) ShieldDurability.get(representation);
-										currentDurability++;
+										if (ShieldDurability.containsKey(representation)) {
+											int currentDurability = (int) ShieldDurability.get(representation);
+											currentDurability++;
 											
-										if (checkIfMax(currentDurability)) {
-											// counter has reached max durability
-											//log.info("Hit Max Shield Dura");
-											TNTBreakShield(ShieldBlock);
-											faction.setPowerLoss(0);
-											ResetTime(representation, targetLoc);
-											return;
-										} else {
-											// counter has not reached max durability yet
-											ShieldDurability.put(representation, currentDurability);
-											//log.info("Set already, set Shield Dura");
+											if (checkIfMax(currentDurability)) {
+												// counter has reached max durability
+												//log.info("[BubbleShield] : onEntityExplode() " + "Hit Max Shield Dura");
+												TNTBreakShield(ShieldBlock);
+												faction.setPowerLoss(0);
+												ResetTime(representation, targetLoc);
+												return;
+											} else {
+												// counter has not reached max durability yet
+												ShieldDurability.put(representation, currentDurability);
+												//log.info("[BubbleShield] : onEntityExplode() " + "Set already, set Shield Dura");
 												
+												startNewTimer(representation, shieldBase);
+											}
+										} else 
+										{
+											ShieldDurability.put(representation, 1);
+											//log.info("[BubbleShield] : onEntityExplode() " + "Set New Shield Dura");
+											shieldBase.setShieldMaxPower(pow);
 											startNewTimer(representation, shieldBase);
-										}
-									} else {
-										ShieldDurability.put(representation, 1);
-										//log.info("Set New Shield Dura");
-										shieldBase.setShieldMaxPower(pow);
-										startNewTimer(representation, shieldBase);
 
-										if (checkIfMax(1)) {
-											TNTBreakShield(ShieldBlock);
-											ResetTime(representation, targetLoc);
-											//log.info("Hit Max");
+											if (checkIfMax(1)) {
+												TNTBreakShield(ShieldBlock);
+												ResetTime(representation, targetLoc);
+												//log.info("[BubbleShield] : onEntityExplode() " + "Hit Max");
+												return;
+											}
 										}
 									}
-											
-									event.setCancelled(true);
-									return;
 								}
+											
+								event.setCancelled(true);
+								return;
+							
 							}
 						}
 					}
 				}
 			}								
 		}
-	    
+		
 	}
 	
 	@SuppressWarnings("unused")
