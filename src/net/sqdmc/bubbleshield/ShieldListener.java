@@ -1,5 +1,6 @@
 package net.sqdmc.bubbleshield;
 
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -312,7 +313,7 @@ public class ShieldListener implements Listener {
         		player.sendMessage("You do not have permission to create this shield.");
         		return;
         	}
-			fshieldowner = new ShieldOwnerFaction(faction);        	
+			fshieldowner = new ShieldOwnerFaction(faction);
 			event.setLine(1, faction.getTag());
 			event.setLine(2, shieldPower);
 			event.setLine(3, shieldPower);
@@ -332,7 +333,7 @@ public class ShieldListener implements Listener {
 			return;
 		}
 		if (faction.getId().equals("-2") || faction.getId().equals("-1")  || faction.getId().equals("0") ) {
-			fshieldowner.sendMessage("You can only create Shields in land you own.");
+			player.sendMessage("You can only create Shields in land you own.");
 			signBlock.breakNaturally();
 			return;
 		}
