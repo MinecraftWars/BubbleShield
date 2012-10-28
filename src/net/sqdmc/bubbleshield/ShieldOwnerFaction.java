@@ -1,17 +1,11 @@
 package net.sqdmc.bubbleshield;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.entity.Player;
-
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 
 import net.sqdmc.bubbleshield.ShieldOwner;
 
-public class ShieldOwnerFaction extends ShieldOwner implements ConfigurationSerializable {
+public class ShieldOwnerFaction extends ShieldOwner {
 
 	@Override
 	public Faction getFaction() {
@@ -66,14 +60,5 @@ public class ShieldOwnerFaction extends ShieldOwner implements ConfigurationSeri
 	@Override
 	public String toString() {
 		return "shieldOwner";
-	}
-
-	@Override
-	public Map<String, Object> serialize() {
-		Map<String, Object> serial = new LinkedHashMap<String, Object>();
-		
-		serial.put("shieldOwner", this.shieldOwner);
-		
-		return serial;
 	}
 }
