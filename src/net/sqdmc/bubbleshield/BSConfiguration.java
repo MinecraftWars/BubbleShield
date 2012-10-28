@@ -40,8 +40,9 @@ public class BSConfiguration {
 	private YamlConfiguration shieldsDB = new YamlConfiguration();
 	
 	private int ProtectionRadius = 16;
-	private long RegenTime = 60000L;
+	private long RegenTime = 6000L;
 	private int Durability = 100;
+	private int AffectedBlockCountMax = 2;
 	
 	public BSConfiguration(BubbleShield plugin) {
 		this.plugin = plugin;
@@ -92,9 +93,10 @@ public class BSConfiguration {
 		try {
 			bukkitConfig.load(configFile);
 			
-			ProtectionRadius = bukkitConfig.getInt("ProtectionRadius.Distance", 16);
-			RegenTime = readLong("RegenTime.Time", "600000");
-			Durability = bukkitConfig.getInt("MaxDurability.Amount", 20);
+			ProtectionRadius = bukkitConfig.getInt("ProtectionRadius.Distance", ProtectionRadius);
+			RegenTime = bukkitConfig.getLong("RegenTime.Time", RegenTime);
+			Durability = bukkitConfig.getInt("MaxDurability.Amount", Durability);
+			AffectedBlockCountMax = bukkitConfig.getInt("MaxHitBlocks.Amount", AffectedBlockCountMax);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,6 +109,7 @@ public class BSConfiguration {
 		write("ProtectionRadius.Distance", ProtectionRadius);
 		write("RegenTime.Time", RegenTime);
 		write("MaxDurability.Amount", Durability);
+		write("MaxHitBlocks.Amount", AffectedBlockCountMax);
 
 		loadData();
 	}
@@ -182,6 +185,10 @@ public class BSConfiguration {
 
 	public long getRegenTime(){
 		return RegenTime;
+	}
+	
+	public int getAffectedBlockCountMax() {
+		return AffectedBlockCountMax;
 	}
 	
 	public void saveDurabilityToFile() {

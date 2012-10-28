@@ -12,6 +12,7 @@ public class ShieldStorage {
 	private HashMap<ShieldOwner, Shield> shields; // = new HashMap<ShieldOwner, Shield>();
 	private HashMap<Block, ShieldBase> blockShieldBase; // = new HashMap<Block, ShieldBase>();
 	
+	public int affectedBlockCount = 0;
 	//private Logger log = Bukkit.getServer().getLogger();
 
 	public ShieldStorage()

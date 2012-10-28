@@ -92,10 +92,20 @@ public class ShieldListener implements Listener {
 					return;
 				}
 	        	//log.info("[BubbleShield] : " + "ShieldBases[n]: " +shieldBase.getShieldBaseLocString());
-	            if (blockProtected(block,shieldBase)) {
+	            if (blockProtected(block,shieldBase) && shieldstorage.affectedBlockCount < config.getAffectedBlockCountMax()) {
 	            	//log.info("[BubbleShield] : " + "Shield Damage Taken! " + shieldBase.getShieldBaseLocString());
 	                decreaseDurability(shieldBase);
+	                
+	                shieldstorage.affectedBlockCount++;
+	                
+	                Timer timer = new Timer();
+	        		timer.schedule(new HitTimer(plugin), 500);
+	        		
 	                if (!event.isCancelled()) event.setCancelled(true);
+	                return;
+	            }
+	            else if (blockProtected(block,shieldBase)) {
+	            	if (!event.isCancelled()) event.setCancelled(true);
 	                return;
 	            }
 	        }
