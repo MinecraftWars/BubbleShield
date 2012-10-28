@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -291,7 +292,7 @@ public class BSConfiguration {
 
 		//try {
 			shieldsDB.load(shieldsFile);
-			//log.info("ShieldsBaseDB: " + shieldsBaseDB.get);
+			//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + shieldsBaseDB.get);
 			
 			Set<String> keys = shieldsDB.getKeys(true);
 			
@@ -328,7 +329,7 @@ public class BSConfiguration {
 				//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + "Sponge" + Sponge.getLocation().toString());
 				//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + "Sign" + Sign.getLocation().toString());
 			
-				if (_Sponge == org.bukkit.Material.SPONGE && _Sign == org.bukkit.Material.SIGN_POST ) {
+				if (_Sponge == org.bukkit.Material.SPONGE && (_Sign == org.bukkit.Material.SIGN_POST || _Sign == Material.WALL_SIGN || _Sign == Material.SIGN)) {
 					ShieldBaseMap.put(Sign, shieldBase);
 					ShieldBaseMap.put(Sponge, shieldBase);
 					ShieldMap.put(fShieldOwner, _shield);

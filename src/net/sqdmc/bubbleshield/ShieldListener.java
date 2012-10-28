@@ -139,7 +139,9 @@ public class ShieldListener implements Listener {
 		Block signBlock = signLoc.getBlock();
 		Block ShieldBlock = spongeLoc.getBlock(); //signBlock.getRelative(BlockFace.DOWN);
 		
-		if ((signBlock.getType() == Material.SIGN || signBlock.getType() == Material.SIGN_POST) && ShieldBlock.getType() == Material.SPONGE){			
+		//log.info("[BubbleShield] : decreaseDurability() " + signLoc.toString() + " " + signBlock.getType());
+		
+		if ((signBlock.getType() == Material.SIGN || signBlock.getType() == Material.SIGN_POST || signBlock.getType() == Material.WALL_SIGN ) && ShieldBlock.getType() == Material.SPONGE){			
 			Faction faction = Board.getFactionAt(signLoc);
 					
 			Sign s = (Sign) signBlock.getState();
@@ -159,7 +161,7 @@ public class ShieldListener implements Listener {
 
 			ShieldBases = shieldstorage.GetShieldBases();
 				
-			//log.info("[BubbleShield] : onEntityExplode() " + spongeLoc.toString());
+			//log.info("[BubbleShield] : decreaseDurability() " + spongeLoc.toString());
 			boolean bShieldExists = shieldstorage.checkShieldExist(shieldBase, ShieldBases);
 				
 			if (!bShieldExists)
