@@ -8,6 +8,9 @@ import net.sqdmc.bubbleshield.ShieldListener;
 import net.sqdmc.bubbleshield.BSConfiguration;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -44,7 +47,7 @@ public class BubbleShield extends JavaPlugin {
 		
 		pluginmanager = getServer().getPluginManager();
 		
-		
+		getCommand("bubbleshield").setExecutor(new Commands());
 		
 		getServer().getPluginManager().registerEvents(entityListener, this);
 	}
@@ -81,4 +84,21 @@ public class BubbleShield extends JavaPlugin {
 	public static String getVersion() {
 		return version;
 	}
+	
+    private class Commands implements CommandExecutor {
+
+		@Override
+    	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+
+			if (args.length >=1 && "reload".equalsIgnoreCase(args[0])) {
+				config.loadConfig();
+				
+				sender.sendMessage("[BubbleShield] Reloaded configuration!");
+				return true;
+			}
+
+			return false;
+		}
+    	
+    }
 }

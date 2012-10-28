@@ -305,8 +305,13 @@ public class ShieldListener implements Listener {
 		String line0 = event.getLine(0);
 		String line1 = event.getLine(1);
 		String shieldPower = line1;
-		if (line0.equalsIgnoreCase("[shield]") && (line1 != null && !line1.equals("") )) {		
-			fshieldowner = new ShieldOwnerFaction(faction);
+		
+		if (line0.equalsIgnoreCase("[shield]") && (line1 != null && !line1.equals("") )) {
+        	if (!player.hasPermission("bubbleshield.create")) {
+        		player.sendMessage("You do not have permission to create this shield.");
+        		return;
+        	}
+			fshieldowner = new ShieldOwnerFaction(faction);        	
 			event.setLine(1, faction.getTag());
 			event.setLine(2, shieldPower);
 			event.setLine(3, shieldPower);

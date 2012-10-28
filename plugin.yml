@@ -1,5 +1,19 @@
 name: BubbleShield
 author: squidicuz
-version: 0.7
+version: 0.8
 main: net.sqdmc.bubbleshield.BubbleShield
 depend: [Factions]
+
+commands:
+  bubbleshield:
+    description: Reload configuration
+    aliases: [bs]
+    usage: |
+      /bubbleshield reload
+    permission: bubbleshield.admin
+
+permissions:
+  bubbleshield.admin:
+    default: op
+  bubbleshield.create:
+    default: true
