@@ -357,8 +357,7 @@ public class ShieldListener implements Listener {
 			int max = Integer.parseInt(sign.getLine(2));
 			int currentpower = Integer.parseInt(sign.getLine(3));
 
-			if ( currentpower < max )
-			{
+			if ( currentpower < max ) {
 				String newpower = String.valueOf(currentpower+1);	
 				shieldBase.shield.setShieldPower(currentpower+1);
 				sign.setLine(3, newpower);
@@ -383,8 +382,7 @@ public class ShieldListener implements Listener {
 						
 						startNewTimer(representation, shieldBase);
 					}
-				} else 
-				{
+				} else {
 					ShieldDurability.put(representation, 1);
 					//log.info("[BubbleShield] : onEntityExplode() " + "Set New Shield Dura");
 					startNewTimer(representation, shieldBase);
