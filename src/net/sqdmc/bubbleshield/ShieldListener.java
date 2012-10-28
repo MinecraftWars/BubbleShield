@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.logging.Logger;
 
@@ -74,265 +75,147 @@ public class ShieldListener implements Listener {
 	        return;
 	    }
 
-		/*ShieldBases = shieldstorage.GetShieldBases();
+		ShieldBases = shieldstorage.GetShieldBases();
 	    
 	    List<Block> blocks = event.blockList();
 	    
 	    for (Block block : blocks) {
 	        // assumes set of shields is available
 	        for (ShieldBase shieldBase : ShieldBases) {
+	        	
+	        	boolean bShieldExists = shieldstorage.GetShieldBases().contains(shieldBase);
+				//boolean bShieldExists = shieldstorage.checkShieldExist(shieldBase, ShieldBases);
+				if (!bShieldExists)
+				{
+					shieldBase.destroy();
+					log.info("[BubbleShield] : Destroyed sbandoned ShieldBase at " + shieldBase.getShieldBaseLocString());
+					return;
+				}
 	        	//log.info("[BubbleShield] : " + "ShieldBases[n]: " +shieldBase.getShieldBaseLocString());
 	            if (blockProtected(block,shieldBase)) {
-	            	log.info("[BubbleShield] : " + "Shield Damage Taken!" + block.getLocation().toString());
+	            	//log.info("[BubbleShield] : " + "Shield Damage Taken! " + shieldBase.getShieldBaseLocString());
 	                decreaseDurability(shieldBase);
 	                if (!event.isCancelled()) event.setCancelled(true);
 	                return;
 	            }
 	        }
-	    }*/
-	    
-	    int radius = Shield.ShieldRadius;
-	    final Entity detonator = event.getEntity();
-		final Location detonatorLoc;
-
-		if (detonator == null) {
-			log.info("[BubbleShield] : " + "onEntityExplode() detonator Null!");
-			detonatorLoc = event.getLocation();
-			return;
-		}
-		else {	
-			detonatorLoc = detonator.getLocation();
-		}
-	    
-		/*for (int x = -radius; x <= radius; x++) {
-			for (int y = -radius; y <= radius; y++) {
-				for (int z = -radius; z <= radius; z++) {
-					
-					Location targetLoc;
-					if (detonator != null)
-						targetLoc = new Location(detonator.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
-					else
-						targetLoc = new Location(event.getLocation().getWorld(), event.getLocation().getX() + x, event.getLocation().getY() + y, event.getLocation().getZ() + z);
-					
-					log.info("[BubbleShield] : " + targetLoc.toString());
-					
-	            	ShieldBase shieldBase = Util.getShieldBase(targetLoc);
-	            	if (shieldBase == null)
-	            		return;
-					
-					if (detonatorLoc.distance(targetLoc) <= radius) {	
-					
-		            	log.info("[BubbleShield] : " + "Shield Damage Taken!");
-		            			            	
-		                decreaseDurability(shieldBase);
-		                if (!event.isCancelled()) event.setCancelled(true);
-		                return;
-					}
-					
-					//if (!event.isCancelled()) event.setCancelled(true);
-	                //return;
-				}
-			}*/
-		
-		// calculate sphere around detonator
-		// calculate sphere around detonator
-		for (int x = -radius; x <= radius; x++) {
-			for (int y = -radius; y <= radius; y++) {
-				for (int z = -radius; z <= radius; z++) {
-					Location targetLoc;
-					if (detonator != null) {
-						targetLoc = new Location(detonator.getWorld(), detonatorLoc.getX() + x, detonatorLoc.getY() + y, detonatorLoc.getZ() + z);
-						}
-					else {
-						targetLoc = new Location(event.getLocation().getWorld(), event.getLocation().getX() + x, event.getLocation().getY() + y, event.getLocation().getZ() + z);
-					}
-					
-					if (detonatorLoc.distance(targetLoc) <= radius) {						
-						Block signBlock = targetLoc.getBlock();
-						if (signBlock.getType() == Material.SIGN || signBlock.getType() == Material.SIGN_POST){
-							//log.info("TNT Exploded");
-								
-							Block ShieldBlock = signBlock.getRelative(BlockFace.DOWN);
-							if (ShieldBlock.getType() == Material.SPONGE) {				
-								Faction faction = Board.getFactionAt(targetLoc);
-									
-								Sign s = (Sign) signBlock.getState();
-								String shi = s.getLine(0);
-								//String p = s.getLine(1);
-								//String fp = s.getLine(1);
-								int maxpower = Integer.parseInt(s.getLine(2));
-								int pow = Integer.parseInt(s.getLine(3));
-
-								if (!shi.equalsIgnoreCase("[shield]"))
-								{
-								    return;
-								}							    						   
-									    
-								ShieldOwnerFaction fSheildowner = new ShieldOwnerFaction(faction);
-								Shield shield = new Shield(fSheildowner);
-								ShieldBase shieldBase = new ShieldBase(ShieldBlock, signBlock, shield, targetLoc.getWorld(), targetLoc.getBlockX(), targetLoc.getBlockY() -1, targetLoc.getBlockZ());
-								shieldBase.setShieldMaxPower(maxpower);
-								
-								//String shieldlocation = targetLoc.getWorld().getName() + "," + targetLoc.getBlockX() + "," + targetLoc.getBlockY() + "," + targetLoc.getBlockZ();
-								
-								ShieldBases = shieldstorage.GetShieldBases();
-								
-								//log.info("[BubbleShield] : onEntityExplode() " + shieldBase.getShieldBaseLocString());
-								boolean bShieldExists = shieldstorage.checkShieldExist(shieldBase, ShieldBases);
-								
-								if (!bShieldExists)
-								{
-									shieldBase.destroy();
-									TNTBreakShield(ShieldBlock);
-									log.info("[BubbleShield] : Destroyed sbandoned ShieldBase at " + shieldBase.getShieldBaseLocString());
-									return;
-								}
-								
-								if (bShieldExists)
-								{					
-									Integer representation = targetLoc.getWorld().hashCode() + targetLoc.getBlockX() * 2389 + targetLoc.getBlockY() * 4027 + targetLoc.getBlockZ() * 2053;						
-										
-									pow--;
-									shield.setShieldPower(pow);
-											
-									if (pow <= 0) {
-										TNTBreakShield(ShieldBlock);
-										return;
-									}
-									if (pow > 0){
-										String newpower = String.valueOf(pow);
-										s.setLine(3, newpower);
-										s.update();
-										shield.owner.sendMessage("Shield Power at " + newpower + "!");
-
-										if (ShieldDurability.containsKey(representation)) {
-											int currentDurability = (int) ShieldDurability.get(representation);
-											currentDurability++;
-											
-											if (checkIfMax(currentDurability)) {
-												// counter has reached max durability
-												//log.info("[BubbleShield] : onEntityExplode() " + "Hit Max Shield Dura");
-												TNTBreakShield(ShieldBlock);
-												faction.setPowerLoss(0);
-												ResetTime(representation, targetLoc);
-												return;
-											} else {
-												// counter has not reached max durability yet
-												ShieldDurability.put(representation, currentDurability);
-												//log.info("[BubbleShield] : onEntityExplode() " + "Set already, set Shield Dura");
-												
-												startNewTimer(representation, shieldBase);
-											}
-										} else 
-										{
-											ShieldDurability.put(representation, 1);
-											//log.info("[BubbleShield] : onEntityExplode() " + "Set New Shield Dura");
-											shieldBase.setShieldMaxPower(pow);
-											startNewTimer(representation, shieldBase);
-
-											if (checkIfMax(1)) {
-												TNTBreakShield(ShieldBlock);
-												ResetTime(representation, targetLoc);
-												//log.info("[BubbleShield] : onEntityExplode() " + "Hit Max");
-												return;
-											}
-										}
-									}
-								}
-											
-								event.setCancelled(true);
-								return;
-							
-							}
-						}
-					}
-				}
-			}								
-		}
+	    }
 		
 	}
 	
-	@SuppressWarnings("unused")
-	private boolean CheckShield(ShieldBase shieldbase) {
-		if (shieldbase == null)
-			return false;
-		ShieldBases = shieldstorage.GetShieldBases();
-		if (shieldstorage.checkShieldExist(shieldbase, ShieldBases))
-			return true;
-		
-		return false;
-	}
-
 	/** 
 	    is block protected by a given shieldbase?
 	*/
-	@SuppressWarnings("unused")
 	private boolean blockProtected(Block block, ShieldBase shieldBase) {
-	    int radius = Shield.ShieldRadius;
+		double radius = Shield.ShieldRadius;
 	    
 	    // first linear checks
-	    if (!block.getWorld().equals(shieldBase.world)) return false;
+	    if (!block.getWorld().getName().equals(shieldBase.world.getName())) return false;
 		if (Math.abs(block.getX() - shieldBase.x)>radius  || Math.abs(block.getY() - shieldBase.y)>radius || Math.abs(block.getZ() - shieldBase.z)>radius) {
 	        return false;
 	    }
 	    
 	    Location shieldLoc = new Location(shieldBase.world, shieldBase.x, shieldBase.y, shieldBase.z);
-	    double distSquared = block.getLocation().distanceSquared(shieldLoc);
+	    double distSquared = shieldLoc.distanceSquared(block.getLocation());
 	    
-	    return radius*radius <= distSquared;
+	    return radius*radius >= distSquared;
 	}
 
-	@SuppressWarnings("unused")
 	private void decreaseDurability(ShieldBase shieldBase) {
 	    // manage durability stuff
-		Location shieldLoc = new Location(shieldBase.world, shieldBase.x, shieldBase.y, shieldBase.z);
+		Location signLoc = new Location(shieldBase.world, shieldBase.x, (shieldBase.y+1), shieldBase.z);
+		Location spongeLoc = new Location(shieldBase.world, shieldBase.x, (shieldBase.y), shieldBase.z);
 		
-		Block signBlock = shieldLoc.getBlock();
-		//Block shieldBlock = shieldLoc.getBlock();
+		Block signBlock = signLoc.getBlock();
+		Block ShieldBlock = spongeLoc.getBlock(); //signBlock.getRelative(BlockFace.DOWN);
 		
-		Block ShieldBlock = signBlock.getRelative(BlockFace.DOWN);
-		if (ShieldBlock.getType() == Material.SPONGE) {				
-			Faction faction = Board.getFactionAt(shieldLoc);
-			
-		    Sign s = (Sign) signBlock.getState();
-		    String shi = s.getLine(0);
-		    //String p = s.getLine(1);
-		    //String fp = s.getLine(1);
-		    int maxpower = Integer.parseInt(s.getLine(2));
-		    int pow = Integer.parseInt(s.getLine(3));
+		if ((signBlock.getType() == Material.SIGN || signBlock.getType() == Material.SIGN_POST) && ShieldBlock.getType() == Material.SPONGE){			
+			Faction faction = Board.getFactionAt(signLoc);
+					
+			Sign s = (Sign) signBlock.getState();
+			String shi = s.getLine(0);
+			int maxpower = Integer.parseInt(s.getLine(2));
+			int pow = Integer.parseInt(s.getLine(3));
 
-		    if (!shi.equalsIgnoreCase("[shield]"))
-		    {
-		    	return;
-		    }	
-		    
-		    ShieldOwnerFaction fSheildowner = new ShieldOwnerFaction(faction);
+			if (!shi.equalsIgnoreCase("[shield]"))
+			{
+			    return;
+			}							    						   
+					    
+			ShieldOwnerFaction fSheildowner = new ShieldOwnerFaction(faction);
 			Shield shield = new Shield(fSheildowner);
-			//ShieldBase shieldBase = new ShieldBase(ShieldBlock, signBlock, shield, targetLoc.getWorld(), targetLoc.getBlockX(), targetLoc.getBlockY(), targetLoc.getBlockZ());
+			//ShieldBase shieldBase = new ShieldBase(ShieldBlock, signBlock, shield, shieldLoc.getWorld(), shieldLoc.getBlockX(), shieldLoc.getBlockY() -1, shieldLoc.getBlockZ());
 			shieldBase.setShieldMaxPower(maxpower);
-			
-			
-			String shieldlocation = shieldLoc.getWorld().getName() + "," + shieldLoc.getBlockX() + "," + shieldLoc.getBlockY() + "," + shieldLoc.getBlockZ();
-			
-			if (shieldBase.getShieldBaseLocString().equals(shieldlocation))
-			{					
-				//Integer representation = targetLoc.getWorld().hashCode() + targetLoc.getBlockX() * 2389 + targetLoc.getBlockY() * 4027 + targetLoc.getBlockZ() * 2053;						
+
+			ShieldBases = shieldstorage.GetShieldBases();
 				
+			//log.info("[BubbleShield] : onEntityExplode() " + spongeLoc.toString());
+			boolean bShieldExists = shieldstorage.checkShieldExist(shieldBase, ShieldBases);
+				
+			if (!bShieldExists)
+			{
+				shieldBase.destroy();
+				TNTBreakShield(ShieldBlock);
+				log.info("[BubbleShield] : Destroyed sbandoned ShieldBase at " + shieldBase.getShieldBaseLocString());
+				return;
+			}
+				
+			if (bShieldExists)
+			{					
+				Integer representation = spongeLoc.getWorld().hashCode() + spongeLoc.getBlockX() * 2389 + spongeLoc.getBlockY() * 4027 + spongeLoc.getBlockZ() * 2053;						
+						
 				pow--;
 				shield.setShieldPower(pow);
-				
-				if (pow <= 0)
+							
+				if (pow <= 0) {
 					TNTBreakShield(ShieldBlock);
+					return;
+				}
 				if (pow > 0){
 					String newpower = String.valueOf(pow);
 					s.setLine(3, newpower);
 					s.update();
 					shield.owner.sendMessage("Shield Power at " + newpower + "!");
+
+					if (ShieldDurability.containsKey(representation)) {
+						int currentDurability = (int) ShieldDurability.get(representation);
+						currentDurability++;
+							
+						if (checkIfMax(currentDurability)) {
+							// counter has reached max durability
+							//log.info("[BubbleShield] : onEntityExplode() " + "Hit Max Shield Dura");
+							TNTBreakShield(ShieldBlock);
+							faction.setPowerLoss(0);
+							ResetTime(representation, spongeLoc);
+							return;
+						} else {
+							// counter has not reached max durability yet
+							ShieldDurability.put(representation, currentDurability);
+							//log.info("[BubbleShield] : onEntityExplode() " + "Set already, set Shield Dura");
+								
+							startNewTimer(representation, shieldBase);
+						}
+					} else 
+					{
+						ShieldDurability.put(representation, 1);
+						//log.info("[BubbleShield] : onEntityExplode() " + "Set New Shield Dura");
+						shieldBase.setShieldMaxPower(pow);
+						startNewTimer(representation, shieldBase);
+
+						if (checkIfMax(1)) {
+							TNTBreakShield(ShieldBlock);
+							ResetTime(representation, spongeLoc);
+							//log.info("[BubbleShield] : onEntityExplode() " + "Hit Max");
+							return;
+						}
+					}
+					
 				}
-				else
-					TNTBreakShield(ShieldBlock);
+				
+				return;
 			}
 		}
+	
 	}
 	
 	/* ================================================================
