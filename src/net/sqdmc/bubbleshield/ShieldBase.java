@@ -1,22 +1,10 @@
 package net.sqdmc.bubbleshield;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 //import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
 public class ShieldBase {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	public final Block sponge;
 	public final Block sign;
 	public final Shield shield;
@@ -30,13 +18,12 @@ public class ShieldBase {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		//result = prime * result + ((sponge == null) ? 0 : sponge.getbgetBlock().hashCode());
 		result = prime * result + ((sign == null) ? 0 : sign.getLocation().hashCode());
 		return result;
 	}
 
 	public boolean equals(Object obj) {
-		// FIXME probably need to manually implement based on block locations
+		// FIX ME
 		if (this == obj)
 			return true;
 		if (obj == null)

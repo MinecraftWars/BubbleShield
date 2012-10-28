@@ -7,19 +7,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.material.Sign;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -131,7 +126,7 @@ public class BSConfiguration {
 		try {
 			shieldsDB.load(shieldsFile);
 			shieldsDB.set(key, o);
-			log.info("[BubbleShield] : " + key + "  " + o);
+			//log.info("[BubbleShield] : write3() " + key + "  " + o);
 			shieldsDB.save(shieldsFile);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -139,6 +134,7 @@ public class BSConfiguration {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private void remove(String key, Object o) {
 		try {
 			shieldsDB.load(shieldsFile);
@@ -149,7 +145,7 @@ public class BSConfiguration {
 				shieldsDB.set(key, null);
 			}
 			
-			log.info("[BubbleShield] : " + key + "  " + o);
+			log.info("[BubbleShield] : remove() " + key + "  " + o);
 			shieldsDB.save(shieldsFile);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -173,7 +169,7 @@ public class BSConfiguration {
 		try {
 			tmp = Long.parseLong(value);
 		} catch (NumberFormatException nfe) {
-			log.warning("Error parsing a long from the config file. Key=" + key);
+			log.warning("[BubbleShield] : readLong() " + "Error parsing a long from the config file. Key=" + key);
 			nfe.printStackTrace();
 		}
 
@@ -203,7 +199,7 @@ public class BSConfiguration {
 			oos.flush();
 			oos.close();
 		} catch (IOException e) {
-			log.severe("Failed writing shields durability for " + BubbleShield.getPluginName());
+			log.severe("[BubbleShield] : saveDurabilityToFile() " + "Failed writing shields durability for " + BubbleShield.getPluginName());
 			e.printStackTrace();
 		}
 	}
@@ -225,10 +221,10 @@ public class BSConfiguration {
 			map = (HashMap<Integer, Integer>) result;
 			ois.close();
 		} catch (IOException ioe) {
-			log.severe("Failed reading shields durability for " + BubbleShield.getPluginName());
+			log.severe("[BubbleShield] : loadDurabilityFromFile() " + "Failed reading shields durability for " + BubbleShield.getPluginName());
 			ioe.printStackTrace();
 		} catch (ClassNotFoundException cnfe) {
-			log.severe("Shields durability file contains an unknown class, was it modified?");
+			log.severe("[BubbleShield] : loadDurabilityFromFile() " + "Shields durability file contains an unknown class, was it modified?");
 			cnfe.printStackTrace();
 		}
 
@@ -254,9 +250,7 @@ public class BSConfiguration {
 			}
 		}
 
-		HashMap<Block, ShieldBase> map = plugin.getListener().getShieldsBase();
-		Object obj = map;
-	
+		HashMap<Block, ShieldBase> map = plugin.getListener().getShieldsBase();	
 		
 		new File(directory).mkdir();
 
@@ -267,7 +261,7 @@ public class BSConfiguration {
 	        final Entry<Block, ShieldBase> entry = iter.next();
 	        final Object value = entry.getValue().getShieldBaseString();
 	        final String key = entry.getValue().shield.getOwner().getId();
-	        log.info("BubbleShield : " + key + " " + value.toString());
+	        //log.info("[BubbleShield] : SaveShieldsToFile() " + key + " " + value.toString());
 	        
 	        write3(key, value);
 	    }
@@ -284,18 +278,13 @@ public class BSConfiguration {
 		HashMap<Block, ShieldBase> ShieldBaseMap = new HashMap<Block, ShieldBase>();
 		HashMap<ShieldOwner, Shield> ShieldMap = new HashMap<ShieldOwner, Shield>();
 		
-		ConfigurationSection shield = null;
-		Map shieldvalues = null;
-		String locationstring = null;
 		int x = 0;
 		int y = 0;
 		int z = 0;
 
 		//try {
 			shieldsDB.load(shieldsFile);
-			
 			//log.info("ShieldsBaseDB: " + shieldsBaseDB.get);
-			
 			
 			Set<String> keys = shieldsDB.getKeys(true);
 			
@@ -303,7 +292,7 @@ public class BSConfiguration {
 			{
 			String result = shieldsDB.getString(str);
 				
-			log.info("LoadShieldBase: result: " + result);
+			//log.info("[BubbleShield] : " + "LoadShieldBase: result: " + result);
 			
 			if (result != null && !result.equals("") && result.length() > 1)
 			{
@@ -329,14 +318,14 @@ public class BSConfiguration {
 			    
 				ShieldBase shieldBase = new ShieldBase( Sponge ,Sign , _shield, Bukkit.getWorld(results[1]),x , y, z);
 			
-				log.info("Sponge" + Sponge.getLocation().toString());
-				log.info("Sign" + Sign.getLocation().toString());
+				//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + "Sponge" + Sponge.getLocation().toString());
+				//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + "Sign" + Sign.getLocation().toString());
 			
 				if (_Sponge == org.bukkit.Material.SPONGE && _Sign == org.bukkit.Material.SIGN_POST ) {
 					ShieldBaseMap.put(Sign, shieldBase);
 					ShieldBaseMap.put(Sponge, shieldBase);
 					ShieldMap.put(fShieldOwner, _shield);
-					log.info(Sign.toString() + " " + shieldBase.getShieldBaseLocString());
+					//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + Sign.toString() + " " + shieldBase.getShieldBaseLocString());
 				}
 			
 				this.plugin.getListener().setShieldBase(ShieldBaseMap);
