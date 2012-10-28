@@ -85,11 +85,9 @@ public class BubbleShield extends JavaPlugin {
 		return version;
 	}
 	
-    private class Commands implements CommandExecutor {
-
+	private class Commands implements CommandExecutor {
 		@Override
-    	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-
+		public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 			if (args.length >=1 && "reload".equalsIgnoreCase(args[0])) {
 				config.loadConfig();
 				
@@ -99,6 +97,6 @@ public class BubbleShield extends JavaPlugin {
 
 			return false;
 		}
-    	
+		
     }
 }
