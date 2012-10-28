@@ -59,6 +59,6 @@ public class ShieldOwnerFaction extends ShieldOwner {
 	
 	@Override
 	public String toString() {
-		return "shieldOwner";
+		return getId();
 	}
 }
