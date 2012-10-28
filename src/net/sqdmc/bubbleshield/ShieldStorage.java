@@ -2,7 +2,6 @@ package net.sqdmc.bubbleshield;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -10,8 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 
 public class ShieldStorage {
-	
-	private String Id;
 	private HashMap<ShieldOwner, Shield> shields; // = new HashMap<ShieldOwner, Shield>();
 	private HashMap<Block, ShieldBase> blockShieldBase; // = new HashMap<Block, ShieldBase>();
 	
@@ -19,7 +16,6 @@ public class ShieldStorage {
 
 	public ShieldStorage()
 	{
-		Id = "0";
 		shields = new HashMap<ShieldOwner, Shield>();
 		blockShieldBase = new HashMap<Block, ShieldBase>();
 	}

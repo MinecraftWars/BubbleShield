@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Timer;
 import java.util.logging.Logger;
 
@@ -52,7 +51,7 @@ public class ShieldListener implements Listener {
 		config = plugin.getBSConfig();
 		if (shieldstorage != null)
 		{
-			//shieldstorage  = this.shieldstorage;
+			
 		}
 		else
 		{
@@ -60,7 +59,7 @@ public class ShieldListener implements Listener {
 			shieldstorage = new ShieldStorage();
 		}
 		
-		//ShieldBases = shieldstorage.GetShieldBases();
+		ShieldBases = shieldstorage.GetShieldBases();
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -170,7 +169,7 @@ public class ShieldListener implements Listener {
 								shieldBase.setShieldMaxPower(maxpower);
 									
 										
-								String shieldlocation = targetLoc.getWorld().getName() + "," + targetLoc.getBlockX() + "," + targetLoc.getBlockY() + "," + targetLoc.getBlockZ();
+								//String shieldlocation = targetLoc.getWorld().getName() + "," + targetLoc.getBlockX() + "," + targetLoc.getBlockY() + "," + targetLoc.getBlockZ();
 										
 								//boolean bCheckShield = CheckShield(shieldBase);
 								//if (!shieldstorage.checkShieldExist(shieldBase))
@@ -233,9 +232,6 @@ public class ShieldListener implements Listener {
 											//log.info("Hit Max");
 										}
 									}
-
-									//log.info(faction.getTag());
-									//log.info("TNT Denied.");
 											
 									event.setCancelled(true);
 									return;

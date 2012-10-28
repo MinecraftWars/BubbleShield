@@ -4,16 +4,14 @@ import java.util.HashMap;
 import java.util.TimerTask;
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
-
+@SuppressWarnings("unused")
 public final class ShieldTimer extends TimerTask {
 	
 	private BubbleShield plugin;
 	private final Integer duraID;
 	private ShieldBase shieldbase;
 	
-	private Logger log = Bukkit.getServer().getLogger();
+	//private Logger log = Bukkit.getServer().getLogger();
 	
 	public ShieldTimer(BubbleShield plugin, Integer duraID, ShieldBase shieldbase) {
 		this.plugin = plugin;
