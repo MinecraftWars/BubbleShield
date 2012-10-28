@@ -36,7 +36,7 @@ public class Util {
 	
 	public static ShieldBase getShieldBase(Location targetLoc) {
 		Block signBlock = targetLoc.getBlock();
-		if (signBlock.getType() == Material.SIGN || signBlock.getType() == Material.SIGN_POST){
+		if (signBlock.getType() == Material.SIGN || signBlock.getType() == Material.SIGN_POST || signBlock.getType() == Material.WALL_SIGN){
 			
 			Block ShieldBlock = signBlock.getRelative(BlockFace.DOWN);
 			if (ShieldBlock.getType() == Material.SPONGE) {				
