@@ -3,12 +3,10 @@ package net.sqdmc.bubbleshield;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Sign;
 
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.Faction;
