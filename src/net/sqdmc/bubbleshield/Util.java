@@ -51,23 +51,4 @@ public class Util {
 		}
 		return null;
 	}
-	
-	public static void RegenPowerLoss(ShieldBase shieldBase)
-	{
-		if (shieldBase != null) {
-			int max = shieldBase.getShieldMaxPower();
-			Sign sign = null;
-			Location location = new Location(shieldBase.world, shieldBase.x, (shieldBase.y+1), shieldBase.z);
-			
-			if (shieldBase.sign.getType() != org.bukkit.Material.SIGN)
-				sign = (Sign) location.getBlock().getState();
-			else
-				sign = (Sign) shieldBase.sign.getState();
-
-			shieldBase.shield.setShieldPower(max);
-			String newpower = String.valueOf(max);	
-			sign.setLine(3, newpower);
-			sign.update();
-		}
-	}
 }

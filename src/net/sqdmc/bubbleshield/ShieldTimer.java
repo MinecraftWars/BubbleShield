@@ -41,7 +41,7 @@ public final class ShieldTimer extends TimerTask {
 		//log.info(shieldbase.toString());
 		//log.info(id.toString());
 		
-		Util.RegenPowerLoss(shieldbase);
+		plugin.getListener().RegenPowerLoss(shieldbase);
 		
 		map.remove(id);
 	}

@@ -335,11 +335,75 @@ public class ShieldListener implements Listener {
 		}
 	}
 	
+	/* ================================================================
+	 *  REGEN
+	 * 
+	 * ================================================================ */
+	
+	public void RegenPowerLoss(ShieldBase shieldBase)
+	{
+		if (shieldBase != null) {
+			Sign sign = null;
+			Location signlocation = new Location(shieldBase.world, shieldBase.x, (shieldBase.y+1), shieldBase.z);
+			Location sponglocation = new Location(shieldBase.world, shieldBase.x, (shieldBase.y), shieldBase.z);
+			
+			try {
+				sign = (Sign) signlocation.getBlock().getState();
+			} catch (java.lang.ClassCastException e) {
+				return;
+			}
+			
+			//int max = shieldBase.getShieldMaxPower();
+			int max = Integer.parseInt(sign.getLine(2));
+			int currentpower = Integer.parseInt(sign.getLine(3));
+
+			if ( currentpower < max )
+			{
+				String newpower = String.valueOf(currentpower+1);	
+				shieldBase.shield.setShieldPower(currentpower+1);
+				sign.setLine(3, newpower);
+				sign.update();
+				shieldBase.shield.owner.sendMessage("Shield Power at " + newpower + "!");
+				
+				Integer representation = shieldBase.world.hashCode() + shieldBase.x * 2389 + shieldBase.y * 4027 + shieldBase.z * 2053;						
+							
+				if (ShieldDurability.containsKey(representation)) {
+					int currentDurability = (int) ShieldDurability.get(representation);
+					currentDurability++;
+					
+					if (checkIfMax(currentDurability)) {
+						// counter has reached max durability
+						//log.info("[BubbleShield] : onEntityExplode() " + "Hit Max Shield Dura");
+						ResetTime(representation, sponglocation);
+						return;
+					} else {
+						// counter has not reached max durability yet
+						ShieldDurability.put(representation, currentDurability);
+						//log.info("[BubbleShield] : onEntityExplode() " + "Set already, set Shield Dura");
+						
+						startNewTimer(representation, shieldBase);
+					}
+				} else 
+				{
+					ShieldDurability.put(representation, 1);
+					//log.info("[BubbleShield] : onEntityExplode() " + "Set New Shield Dura");
+					startNewTimer(representation, shieldBase);
+
+					if (checkIfMax(1)) {
+						ResetTime(representation, sponglocation);
+						//log.info("[BubbleShield] : onEntityExplode() " + "Hit Max");
+						return;
+					}
+				}
+			}
+		}
+	}
 	
 	/* ================================================================
 	 *  CREATE
 	 * 
 	 * ================================================================ */
+	
 	@EventHandler
 	public void createShield(SignChangeEvent event) {
 		Player player = event.getPlayer();
