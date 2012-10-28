@@ -27,6 +27,7 @@ public class BubbleShield extends JavaPlugin {
 	public void onEnable() {
 		PluginDescriptionFile pdfFile = getDescription();
 		version = pdfFile.getVersion();
+		pluginmanager = getServer().getPluginManager();
 
 		try {
 			config.loadConfig();
@@ -42,14 +43,12 @@ public class BubbleShield extends JavaPlugin {
 			e.printStackTrace();
 		}
 		entityListener.setShieldDurability(config.loadDurabilityFromFile());
-
-		log.info(PLUGIN_NAME + " v" + version + " enabled");
-		
-		pluginmanager = getServer().getPluginManager();
-		
+				
 		getCommand("bubbleshield").setExecutor(new Commands());
 		
 		getServer().getPluginManager().registerEvents(entityListener, this);
+		
+		log.info(PLUGIN_NAME + " v" + version + " enabled");
 	}
 	
 	public void onDisable(){
