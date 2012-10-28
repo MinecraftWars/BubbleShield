@@ -192,6 +192,11 @@ public class BSConfiguration {
 		return AffectedBlockCountMax;
 	}
 	
+	/* ==========================================================================================
+	 * SVAE AND LOAD durability
+	 * 
+	 */
+	
 	public void saveDurabilityToFile() {
 		if (plugin.getListener() == null || plugin.getListener().getShieldDurability() == null) {
 			return;
@@ -240,7 +245,7 @@ public class BSConfiguration {
 	}
 	
 	/* ==========================================================================================
-	 * 
+	 *  SAVE AND LOAD shields
 	 * 
 	 */
 	
