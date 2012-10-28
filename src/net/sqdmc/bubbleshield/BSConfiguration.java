@@ -295,13 +295,12 @@ public class BSConfiguration {
 		int y = 0;
 		int z = 0;
 
-		//try {
-			shieldsDB.load(shieldsFile);
-			//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + shieldsBaseDB.get);
+		shieldsDB.load(shieldsFile);
+		//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + shieldsBaseDB.get);
 			
-			Set<String> keys = shieldsDB.getKeys(true);
+		Set<String> keys = shieldsDB.getKeys(true);
 			
-			for (String str : keys)
+		for (String str : keys)
 			{
 			String result = shieldsDB.getString(str);
 				
@@ -344,11 +343,7 @@ public class BSConfiguration {
 				this.plugin.getListener().setShieldBase(ShieldBaseMap);
 				this.plugin.getListener().setShields(ShieldMap);
 			}
-			}
-		//}
-		//catch (Exception e) {
-		//	log.info("[BubbleShield] : " + e.toString());	
-			
-		//}
+		}
+
 	}
 }
