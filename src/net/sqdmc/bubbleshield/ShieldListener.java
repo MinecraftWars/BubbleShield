@@ -404,6 +404,22 @@ public class ShieldListener implements Listener {
 		ShieldBase shieldBase = shieldstorage.getBlockShieldBase().get(block);
 		if (shieldBase != null) {
 			Shield shield = shieldBase.shield;
+			Player player = event.getPlayer();
+			
+			Location signLoc = new Location(shieldBase.world, shieldBase.x, (shieldBase.y+1), shieldBase.z);
+			Block signBlock = signLoc.getBlock();
+			
+			Sign sign = (Sign) signBlock.getState();
+			int maxpower = Integer.parseInt(sign.getLine(2));
+			int pow = Integer.parseInt(sign.getLine(3));
+			
+			if (pow != maxpower) {
+				//shield.owner.sendMessage("Cannot break shield unless it is fully charged!");
+				player.sendMessage("Can not break shield unless it is fully charged!");
+				event.setCancelled(true);
+				return;
+			}
+			
 			shieldBase.destroy();
 			ShieldOwnerFaction fShieldOwner = new ShieldOwnerFaction(Board.getFactionAt(block));
 			shieldstorage.removeShields(fShieldOwner);
