@@ -139,7 +139,7 @@ public class BSConfiguration {
 	}
 	
 	@SuppressWarnings("unused")
-	private void remove(String key, Object o) {
+	private void remove(String key) {
 		try {
 			shieldsDB.load(shieldsFile);
 			
@@ -149,7 +149,7 @@ public class BSConfiguration {
 				shieldsDB.set(key, null);
 			}
 			
-			log.info("[BubbleShield] : remove() " + key + "  " + o);
+			//log.info("[BubbleShield] : remove() " + key);
 			shieldsDB.save(shieldsFile);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -157,6 +157,7 @@ public class BSConfiguration {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private long readLong(String key, String def) {
 		try {
 			bukkitConfig.load(configFile);
@@ -273,7 +274,7 @@ public class BSConfiguration {
 	    while (iter.hasNext()) {
 	        final Entry<Block, ShieldBase> entry = iter.next();
 	        final Object value = entry.getValue().getShieldBaseString();
-	        final String key = entry.getValue().shield.getOwner().getId();
+	        final String key = Integer.toString(entry.getValue().hashCode());
 	        //log.info("[BubbleShield] : SaveShieldsToFile() " + key + " " + value.toString());
 	        
 	        write3(key, value);
@@ -338,6 +339,10 @@ public class BSConfiguration {
 					ShieldBaseMap.put(Sponge, shieldBase);
 					ShieldMap.put(fShieldOwner, _shield);
 					//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + Sign.toString() + " " + shieldBase.getShieldBaseLocString());
+				}
+				else
+				{
+					remove(str);
 				}
 			
 				this.plugin.getListener().setShieldBase(ShieldBaseMap);

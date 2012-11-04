@@ -2,7 +2,7 @@ package net.sqdmc.bubbleshield;
 
 import org.bukkit.World;
 import org.bukkit.block.Block;
-//import org.bukkit.configuration.serialization.ConfigurationSerialization;
+
 
 public class ShieldBase {
 	public final Block sponge;
@@ -18,12 +18,11 @@ public class ShieldBase {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((sign == null) ? 0 : sign.getLocation().hashCode());
+		result = prime * result + ((sponge == null) ? 0 : sponge.getLocation().hashCode());
 		return result;
 	}
 
 	public boolean equals(Object obj) {
-		// FIX ME
 		if (this == obj)
 			return true;
 		if (obj == null)
