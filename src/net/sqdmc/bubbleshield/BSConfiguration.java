@@ -319,7 +319,7 @@ public class BSConfiguration {
 				Shield _shield = new Shield(fShieldOwner);
 		
 				x = Integer.parseInt(results[2]);
-			    y = Integer.parseInt(results[3]);
+				y = Integer.parseInt(results[3]);
 			    z = Integer.parseInt(results[4]);
 			
 				Block Sponge = Bukkit.getWorld(results[1]).getBlockAt(x, (y), z);
@@ -338,8 +338,7 @@ public class BSConfiguration {
 					ShieldMap.put(fShieldOwner, _shield);
 					//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + Sign.toString() + " " + shieldBase.getShieldBaseLocString());
 				}
-				else
-				{
+				else {
 					remove(str);
 				}
 			
