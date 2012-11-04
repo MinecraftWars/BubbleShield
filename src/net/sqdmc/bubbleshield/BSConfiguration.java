@@ -138,14 +138,12 @@ public class BSConfiguration {
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	private void remove(String key) {
 		try {
 			shieldsDB.load(shieldsFile);
 			
 			if (shieldsDB.contains(key))
 			{
-				shieldsDB.get(key);
 				shieldsDB.set(key, null);
 			}
 			
