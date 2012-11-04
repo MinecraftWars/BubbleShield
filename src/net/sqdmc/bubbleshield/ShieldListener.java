@@ -414,7 +414,7 @@ public class ShieldListener implements Listener {
 			int pow = Integer.parseInt(sign.getLine(3));
 			
 			if (pow != maxpower) {
-				//shield.owner.sendMessage("Cannot break shield unless it is fully charged!");
+				//shield.owner.sendMessage("Can not break shield unless it is fully charged!");
 				player.sendMessage("Can not break shield unless it is fully charged!");
 				event.setCancelled(true);
 				return;
