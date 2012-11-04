@@ -349,8 +349,8 @@ public class ShieldListener implements Listener {
 			int shieldCount = Util.getShieldCount(shieldstorage, fshieldowner.getId());
 			if (shieldstorage.getBlockShieldBase() != null){
 				if (shieldCount > config.getMaxShieldCount()){
-					//log.info("[BubbleShield] : " + fshieldowner.getId() + " Already has a shield!");
-					fshieldowner.sendMessage("You already have a Shield.");
+					//log.info("[BubbleShield] : " + fshieldowner.getId() + " Has the maximum amount of Shields.!");
+					fshieldowner.sendMessage("You have the maximum amount of Shields.");
 					Sponge.breakNaturally();
 					return;
 				}
