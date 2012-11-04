@@ -311,9 +311,7 @@ public class BSConfiguration {
 			if (result != null && !result.equals("") && result.length() > 1) {
 				String[] results = result.split(",");
 			
-				Factions factions = Factions.i;
-		
-				Faction faction = factions.get(results[0].replace(" ", ""));
+				Faction faction = Factions.i.get(results[0].replace(" ", ""));
 			
 				ShieldOwnerFaction fShieldOwner = new ShieldOwnerFaction(faction);
 		
@@ -334,7 +332,10 @@ public class BSConfiguration {
 				//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + "Sponge" + Sponge.getLocation().toString());
 				//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + "Sign" + Sign.getLocation().toString());
 			
-				if (_Sponge == org.bukkit.Material.SPONGE && (_Sign == org.bukkit.Material.SIGN_POST || _Sign == Material.WALL_SIGN || _Sign == Material.SIGN)) {
+				if (_Sponge == org.bukkit.Material.SPONGE 
+						&& (_Sign == org.bukkit.Material.SIGN_POST 
+						|| _Sign == Material.WALL_SIGN 
+						|| _Sign == Material.SIGN)) {
 					ShieldBaseMap.put(Sign, shieldBase);
 					ShieldBaseMap.put(Sponge, shieldBase);
 					ShieldMap.put(fShieldOwner, _shield);
