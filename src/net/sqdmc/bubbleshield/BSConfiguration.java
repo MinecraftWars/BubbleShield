@@ -141,12 +141,9 @@ public class BSConfiguration {
 	private void remove(String key) {
 		try {
 			shieldsDB.load(shieldsFile);
-			
-			if (shieldsDB.contains(key))
-			{
+			if (shieldsDB.contains(key)) {
 				shieldsDB.set(key, null);
 			}
-			
 			//log.info("[BubbleShield] : remove() " + key);
 			shieldsDB.save(shieldsFile);
 		} catch (Exception e) {
@@ -179,16 +176,20 @@ public class BSConfiguration {
 		return tmp;
 	}
 	
-	public int getMaxPowerCost(){
+	public int getMaxPowerCost() {
 		return Durability;
 	}
 
-	public long getRegenTime(){
+	public long getRegenTime() {
 		return RegenTime;
 	}
 	
 	public int getAffectedBlockCountMax() {
 		return AffectedBlockCountMax;
+	}
+	
+	public int getShieldRadius() {
+		return ProtectionRadius;
 	}
 	
 	/* ==========================================================================================
@@ -253,8 +254,7 @@ public class BSConfiguration {
 			return;
 		}
 		
-		if (!shieldsFile.exists())
-		{
+		if (!shieldsFile.exists()) {
 			try {
 				shieldsFile.createNewFile();
 			} catch (IOException e) {
@@ -268,7 +268,6 @@ public class BSConfiguration {
 
 	    final Iterator<Entry<Block, ShieldBase>> iter = map.entrySet().iterator();
 	    
-
 	    while (iter.hasNext()) {
 	        final Entry<Block, ShieldBase> entry = iter.next();
 	        final Object value = entry.getValue().getShieldBaseString();
@@ -295,18 +294,14 @@ public class BSConfiguration {
 		int z = 0;
 
 		shieldsDB.load(shieldsFile);
-		//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + shieldsBaseDB.get);
 			
 		Set<String> keys = shieldsDB.getKeys(true);
 			
-		for (String str : keys)
-			{
+		for (String str : keys) {
 			String result = shieldsDB.getString(str);
-				
 			//log.info("[BubbleShield] : " + "LoadShieldBase: result: " + result);
 			
-			if (result != null && !result.equals("") && result.length() > 1)
-			{
+			if (result != null && !result.equals("") && result.length() > 1) {
 				String[] results = result.split(",");
 			
 				Factions factions = Factions.i;
@@ -320,8 +315,8 @@ public class BSConfiguration {
 		
 				x = Integer.parseInt(results[2]);
 				y = Integer.parseInt(results[3]);
-			    z = Integer.parseInt(results[4]);
-			
+				z = Integer.parseInt(results[4]);
+
 				Block Sponge = Bukkit.getWorld(results[1]).getBlockAt(x, (y), z);
 				org.bukkit.Material _Sponge = Sponge.getType();
 				Block Sign = Bukkit.getWorld(results[1]).getBlockAt(x, (y+1), z);

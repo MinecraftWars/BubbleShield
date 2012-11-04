@@ -1,6 +1,5 @@
 package net.sqdmc.bubbleshield;
 
-import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ public class ShieldListener implements Listener {
 	BSConfiguration config;
 	
 	ShieldStorage shieldstorage;
-	ArrayList<ShieldBase> ShieldBases; // initialize somehow
+	ArrayList<ShieldBase> ShieldBases;
 	
 	private HashMap<Integer, Integer> ShieldDurability = new HashMap<Integer, Integer>();
 	private HashMap<Integer, Timer> shieldTimer = new HashMap<Integer, Timer>();
@@ -84,14 +83,13 @@ public class ShieldListener implements Listener {
 	        for (ShieldBase shieldBase : ShieldBases) {
 	        	
 	        	boolean bShieldExists = shieldstorage.GetShieldBases().contains(shieldBase);
-				//boolean bShieldExists = shieldstorage.checkShieldExist(shieldBase, ShieldBases);
 				if (!bShieldExists)
 				{
 					shieldBase.destroy();
 					log.info("[BubbleShield] : Destroyed sbandoned ShieldBase at " + shieldBase.getShieldBaseLocString());
 					return;
 				}
-	        	//log.info("[BubbleShield] : " + "ShieldBases[n]: " +shieldBase.getShieldBaseLocString());
+				
 	            if (blockProtected(block,shieldBase) && shieldstorage.affectedBlockCount < config.getAffectedBlockCountMax()) {
 	            	//log.info("[BubbleShield] : " + "Shield Damage Taken! " + shieldBase.getShieldBaseLocString());
 	                decreaseDurability(shieldBase);
@@ -117,7 +115,7 @@ public class ShieldListener implements Listener {
 	    is block protected by a given shieldbase?
 	*/
 	private boolean blockProtected(Block block, ShieldBase shieldBase) {
-		double radius = Shield.ShieldRadius;
+		double radius = config.getShieldRadius();
 	    
 	    // first linear checks
 	    if (!block.getWorld().getName().equals(shieldBase.world.getName())) return false;
@@ -156,7 +154,6 @@ public class ShieldListener implements Listener {
 					    
 			ShieldOwnerFaction fSheildowner = new ShieldOwnerFaction(faction);
 			Shield shield = new Shield(fSheildowner);
-			//ShieldBase shieldBase = new ShieldBase(ShieldBlock, signBlock, shield, shieldLoc.getWorld(), shieldLoc.getBlockX(), shieldLoc.getBlockY() -1, shieldLoc.getBlockZ());
 			shieldBase.setShieldMaxPower(maxpower);
 
 			ShieldBases = shieldstorage.GetShieldBases();
@@ -248,7 +245,6 @@ public class ShieldListener implements Listener {
 				return;
 			}
 			
-			//int max = shieldBase.getShieldMaxPower();
 			int max = Integer.parseInt(sign.getLine(2));
 			int currentpower = Integer.parseInt(sign.getLine(3));
 

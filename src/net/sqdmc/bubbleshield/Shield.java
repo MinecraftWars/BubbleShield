@@ -9,7 +9,6 @@ public class Shield {
 	public final ShieldOwner owner;
 	public int ShieldPower;
 	public int ShieldPowerMax;
-	public static int ShieldRadius = 16;
 	
 	public Shield(ShieldOwner owner) {
 		this.owner = owner;
