@@ -354,6 +354,9 @@ public class ShieldListener implements Listener {
 					Sponge.breakNaturally();
 					return;
 				}
+				else if (shieldCount == 0) {
+					faction.setPowerLoss(0);
+				}
 			}
 			
 			Shield shield = Util.getShield(fshieldowner, shieldstorage);
