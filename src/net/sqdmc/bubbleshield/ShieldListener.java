@@ -194,7 +194,6 @@ public class ShieldListener implements Listener {
 							// counter has reached max durability
 							//log.info("[BubbleShield] : onEntityExplode() " + "Hit Max Shield Dura");
 							TNTBreakShield(ShieldBlock);
-							faction.setPowerLoss(0);
 							ResetTime(representation, spongeLoc);
 							return;
 						} else {
@@ -346,9 +345,10 @@ public class ShieldListener implements Listener {
 				Sponge.breakNaturally();
 				return;			
 			}
-					
+			
+			int shieldCount = Util.getShieldCount(shieldstorage, fshieldowner.getId());
 			if (shieldstorage.getBlockShieldBase() != null){
-				if (shieldstorage.getShields().containsKey(fshieldowner)){
+				if (shieldCount > config.getMaxShieldCount()){
 					//log.info("[BubbleShield] : " + fshieldowner.getId() + " Already has a shield!");
 					fshieldowner.sendMessage("You already have a Shield.");
 					Sponge.breakNaturally();
@@ -363,14 +363,14 @@ public class ShieldListener implements Listener {
 						
 			ShieldBase shieldbase = new ShieldBase(Sponge, signBlock, shield, ShieldBlock.getWorld(),ShieldBlock.getX(),ShieldBlock.getY(),ShieldBlock.getZ());
 			
-			shieldbase.setShieldMaxPower( Integer.parseInt(shieldPower));
+			shieldbase.setShieldMaxPower(Integer.parseInt(shieldPower));
 			
 			shieldstorage.addBlockShieldBase(signBlock, shieldbase);
 			shieldstorage.addBlockShieldBase(ShieldBlock, shieldbase);
 			
-			faction.setPowerLoss(-Integer.parseInt(shieldPower));
+			faction.addPowerLoss(-Integer.parseInt(shieldPower));
 		
-			log.info("[BubbleShield] : " + "Shield created by "+ player.getName() + " At location: " + shieldbase.getShieldBaseLocString() + " For Faction: " + shield.getOwner().getId());
+			log.info("[BubbleShield] : " + "Shield created by "+ player.getName() + " At location: " + shieldbase.getShieldBaseLocString() + " For Faction: " + shield.getOwner().getId() + " With power of: " + shieldPower);
 			fshieldowner.sendMessage("Shield Created");
 			
 			try {
@@ -423,7 +423,7 @@ public class ShieldListener implements Listener {
 			shieldstorage.removeBlockShieldBase(shieldBase.sign);
 			
 			Faction faction = Board.getFactionAt(event.getBlock().getLocation());
-			faction.setPowerLoss(0);
+			faction.addPowerLoss(maxpower);
 			
 			shield.owner.sendMessage("Shield Destroyed!");
 			
@@ -470,7 +470,8 @@ public class ShieldListener implements Listener {
 			Faction faction = Board.getFactionAt(shieldblock);
 			shield.owner.sendMessage("Shield Destroyed!");
 			
-			faction.setPowerLoss(0);
+			Sign sign = (Sign) shieldBase.sign.getState();
+			faction.addPowerLoss(Integer.parseInt(sign.getLine(2)));
 			
 			try {
 				config.SaveShieldsToFile();

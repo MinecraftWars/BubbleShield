@@ -49,4 +49,15 @@ public class Util {
 		}
 		return null;
 	}
+	
+	public static int getShieldCount(ShieldStorage shieldstorage, String owner) {
+		int count = 0;
+		for (ShieldBase shieldbase : shieldstorage.GetShieldBases()) {
+			if (shieldbase.shield.owner.getId() == owner) {
+				count++;
+			}
+		}
+
+		return count;
+	}
 }
