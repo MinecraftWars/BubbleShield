@@ -18,6 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
@@ -310,15 +311,18 @@ public class BSConfiguration {
 			
 			if (result != null && !result.equals("") && result.length() > 1) {
 				String[] results = result.split(",");
-			
-				Factions factions = Factions.i;
+				
+				ShieldOwner shieldOwner = null;
+				
+				if (results[5].equalsIgnoreCase("Faction")) {
+					Faction faction = Factions.i.get(results[0].replace(" ", ""));
+					shieldOwner = new ShieldOwnerFaction(faction);
+				} else {
+					Player player = Bukkit.getPlayer(results[0].replace(" ", ""));
+					shieldOwner = new ShieldOwnerPlayer(player);
+				}
 		
-				Faction faction = factions.get(results[0].replace(" ", ""));
-			
-				ShieldOwnerFaction fShieldOwner = new ShieldOwnerFaction(faction);
-		
-		
-				Shield _shield = new Shield(fShieldOwner);
+				Shield _shield = new Shield(shieldOwner);
 		
 				x = Integer.parseInt(results[2]);
 				y = Integer.parseInt(results[3]);
@@ -330,14 +334,22 @@ public class BSConfiguration {
 				org.bukkit.Material _Sign = Sign.getType();
 			    
 				ShieldBase shieldBase = new ShieldBase( Sponge ,Sign , _shield, Bukkit.getWorld(results[1]),x , y, z);
+				shieldBase.setType(results[5]);
 			
 				//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + "Sponge" + Sponge.getLocation().toString());
 				//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + "Sign" + Sign.getLocation().toString());
 			
-				if (_Sponge == org.bukkit.Material.SPONGE && (_Sign == org.bukkit.Material.SIGN_POST || _Sign == Material.WALL_SIGN || _Sign == Material.SIGN)) {
+				if ( (_Sponge == org.bukkit.Material.SPONGE 
+						|| _Sponge == org.bukkit.Material.EMERALD_BLOCK 
+						|| _Sponge == org.bukkit.Material.DIAMOND_BLOCK 
+						|| _Sponge == org.bukkit.Material.GOLD_BLOCK 
+						|| _Sponge == org.bukkit.Material.IRON_BLOCK) 
+						&& (_Sign == org.bukkit.Material.SIGN_POST 
+						|| _Sign == Material.WALL_SIGN 
+						|| _Sign == Material.SIGN)) {
 					ShieldBaseMap.put(Sign, shieldBase);
 					ShieldBaseMap.put(Sponge, shieldBase);
-					ShieldMap.put(fShieldOwner, _shield);
+					ShieldMap.put(shieldOwner, _shield);
 					//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + Sign.toString() + " " + shieldBase.getShieldBaseLocString());
 				}
 				else {

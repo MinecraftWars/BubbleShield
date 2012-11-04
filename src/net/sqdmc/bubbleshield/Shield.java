@@ -18,7 +18,7 @@ public class Shield {
 		this.storage.add(shieldBase);
 	}
 	
-	public ShieldOwner getOwner(){
+	public ShieldOwner getShieldOwner(){
 		return owner;
 	}
 	

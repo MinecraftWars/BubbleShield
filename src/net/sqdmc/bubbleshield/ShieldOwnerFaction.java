@@ -7,14 +7,11 @@ import net.sqdmc.bubbleshield.ShieldOwner;
 
 public class ShieldOwnerFaction extends ShieldOwner {
 
-	@Override
 	public Faction getFaction() {
 		return shieldOwner;
 	}
 	
-	@Override
 	public String getId() {
-		// TODO Auto-generated method stub
 		return shieldOwner.getId();
 	}
 	
@@ -60,5 +57,10 @@ public class ShieldOwnerFaction extends ShieldOwner {
 	@Override
 	public String toString() {
 		return getId();
+	}
+
+	@Override
+	public String getOwner() {
+		return shieldOwner.getId();
 	}
 }

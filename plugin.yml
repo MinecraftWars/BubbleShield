@@ -1,6 +1,6 @@
 name: BubbleShield
 author: squidicuz
-version: 0.9.5
+version: 0.9.6
 main: net.sqdmc.bubbleshield.BubbleShield
 depend: [Factions]
 
@@ -15,5 +15,7 @@ commands:
 permissions:
   bubbleshield.admin:
     default: op
-  bubbleshield.create:
+  bubbleshield.create.player:
+    default: true
+  bubbleshield.create.faction:
     default: true

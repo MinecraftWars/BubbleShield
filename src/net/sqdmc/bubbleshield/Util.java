@@ -53,11 +53,26 @@ public class Util {
 	public static int getShieldCount(ShieldStorage shieldstorage, String owner) {
 		int count = 0;
 		for (ShieldBase shieldbase : shieldstorage.GetShieldBases()) {
-			if (shieldbase.shield.owner.getId() == owner) {
+			if (shieldbase.shield.getShieldOwner().getOwner() == owner) {
 				count++;
 			}
 		}
 
 		return count;
+	}
+	
+	public static int getShieldPowerFromBlock(Block block) {
+		if (block.getType() == Material.SPONGE)
+			return 100;
+		else if (block.getType() == Material.EMERALD_BLOCK)
+			return 75;
+		else if (block.getType() == Material.DIAMOND_BLOCK)
+			return 50;
+		else if (block.getType() == Material.GOLD_BLOCK)
+			return 25;
+		else if (block.getType() == Material.IRON_BLOCK)
+			return 10;
+
+		return 0;
 	}
 }

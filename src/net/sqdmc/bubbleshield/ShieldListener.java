@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.logging.Logger;
 
+import net.sqdmc.bubbleshield.ShieldBase.ShieldType;
 import net.sqdmc.bubbleshield.ShieldOwnerFaction;
 import net.sqdmc.bubbleshield.Shield;
 import net.sqdmc.bubbleshield.ShieldBase;
@@ -86,7 +87,7 @@ public class ShieldListener implements Listener {
 				if (!bShieldExists)
 				{
 					shieldBase.destroy();
-					log.info("[BubbleShield] : Destroyed sbandoned ShieldBase at " + shieldBase.getShieldBaseLocString());
+					log.info("[BubbleShield] : Destroyed abandoned ShieldBase at " + shieldBase.getShieldBaseLocString());
 					return;
 				}
 				
@@ -139,25 +140,20 @@ public class ShieldListener implements Listener {
 		
 		//log.info("[BubbleShield] : decreaseDurability() " + signLoc.toString() + " " + signBlock.getType());
 		
-		if ((signBlock.getType() == Material.SIGN || signBlock.getType() == Material.SIGN_POST || signBlock.getType() == Material.WALL_SIGN ) && ShieldBlock.getType() == Material.SPONGE){			
-			Faction faction = Board.getFactionAt(signLoc);
-					
+		if ((signBlock.getType() == Material.SIGN || signBlock.getType() == Material.SIGN_POST || signBlock.getType() == Material.WALL_SIGN )) { // && ShieldBlock.getType() == Material.SPONGE){						
 			Sign s = (Sign) signBlock.getState();
 			String shi = s.getLine(0);
 			int maxpower = Integer.parseInt(s.getLine(2));
 			int pow = Integer.parseInt(s.getLine(3));
 
-			if (!shi.equalsIgnoreCase("[shield]"))
+			if (! (shi.equalsIgnoreCase("[shield]") || shi.equalsIgnoreCase("[f shield]")))
 			{
 			    return;
 			}							    						   
-					    
-			ShieldOwnerFaction fSheildowner = new ShieldOwnerFaction(faction);
-			Shield shield = new Shield(fSheildowner);
-			shieldBase.setShieldMaxPower(maxpower);
 
+			shieldBase.setShieldMaxPower(maxpower);
+			
 			ShieldBases = shieldstorage.GetShieldBases();
-				
 			//log.info("[BubbleShield] : decreaseDurability() " + spongeLoc.toString());
 			boolean bShieldExists = shieldstorage.checkShieldExist(shieldBase, ShieldBases);
 				
@@ -165,7 +161,7 @@ public class ShieldListener implements Listener {
 			{
 				shieldBase.destroy();
 				TNTBreakShield(ShieldBlock);
-				log.info("[BubbleShield] : Destroyed sbandoned ShieldBase at " + shieldBase.getShieldBaseLocString());
+				log.info("[BubbleShield] : Destroyed abandoned ShieldBase at " + shieldBase.getShieldBaseLocString());
 				return;
 			}
 				
@@ -174,7 +170,7 @@ public class ShieldListener implements Listener {
 				Integer representation = spongeLoc.getWorld().hashCode() + spongeLoc.getBlockX() * 2389 + spongeLoc.getBlockY() * 4027 + spongeLoc.getBlockZ() * 2053;						
 						
 				pow--;
-				shield.setShieldPower(pow);
+				shieldBase.shield.setShieldPower(pow);
 							
 				if (pow <= 0) {
 					TNTBreakShield(ShieldBlock);
@@ -184,7 +180,7 @@ public class ShieldListener implements Listener {
 					String newpower = String.valueOf(pow);
 					s.setLine(3, newpower);
 					s.update();
-					shield.owner.sendMessage("Shield Power at " + newpower + "!");
+					shieldBase.shield.owner.sendMessage("Shield Power at " + newpower + "!");
 
 					if (ShieldDurability.containsKey(representation)) {
 						int currentDurability = (int) ShieldDurability.get(representation);
@@ -294,64 +290,93 @@ public class ShieldListener implements Listener {
 	
 	@EventHandler
 	public void createShield(SignChangeEvent event) {
-		Player player = event.getPlayer();
-		Faction faction = Board.getFactionAt(event.getBlock().getLocation());
-					
-		ShieldOwnerFaction fshieldowner;
+		Player player = event.getPlayer();					
+		ShieldOwner shieldowner = null;
+		
+		ShieldType shieldType;
 		
 		String line0 = event.getLine(0);
 		String line1 = event.getLine(1);
-		String shieldPower = line1;
 		
-		if (line0.equalsIgnoreCase("[shield]") && (line1 != null && !line1.equals("") )) {
-        	if (!player.hasPermission("bubbleshield.create")) {
+		if (line0.equalsIgnoreCase("[shield]")) {
+        	if (!player.hasPermission("bubbleshield.create.player")) {
         		player.sendMessage("You do not have permission to create this shield.");
         		return;
         	}
-			fshieldowner = new ShieldOwnerFaction(faction);
-			event.setLine(1, faction.getTag());
-			event.setLine(2, shieldPower);
-			event.setLine(3, shieldPower);
+        	shieldType = ShieldType.Player;			
+		} else if (line0.equalsIgnoreCase("[f shield]") && (line1 != null && !line1.equals("") )) {
+        	if (!player.hasPermission("bubbleshield.create.faction")) {
+        		player.sendMessage("You do not have permission to create this shield.");
+        		return;
+        	}
+			shieldType = ShieldType.Faction;
 		} else return; // not for us!
 		
+		if (!Util.isNumeric(line1) && shieldType == ShieldType.Faction) {
+			player.sendMessage("Shield Power must be a number on the second line.");
+			event.getBlock().breakNaturally();
+			return;
+		}
+		
+		int shieldPower = 0;
 		Block signBlock = event.getBlock();
-		Block ShieldBlock = signBlock.getRelative(BlockFace.DOWN);
+		Block shieldBlock = signBlock.getRelative(BlockFace.DOWN);
 		
-		if (!Util.isNumeric(shieldPower)) {
-			fshieldowner.sendMessage("Shield Power must be a number on the second line.");
-			signBlock.breakNaturally();
-			return;
-		}
-		if (Integer.parseInt(shieldPower) < 1) {
-			fshieldowner.sendMessage("Shield must have a power of greater than zero.");
-			signBlock.breakNaturally();
-			return;
-		}
-		if (faction.getId().equals("-2") || faction.getId().equals("-1")  || faction.getId().equals("0") ) {
-			player.sendMessage("You can only create Shields in land you own.");
-			signBlock.breakNaturally();
-			return;
-		}
-		
-		if (ShieldBlock.getType() == Material.SPONGE) {
+		if (shieldType == ShieldType.Player) {
 			
-			Block Sponge = (Block)ShieldBlock;	
+			shieldowner = new ShieldOwnerPlayer(player);
+			shieldPower = Util.getShieldPowerFromBlock(shieldBlock);
+			//Block block = (Block)shieldBlock;
 			
-			if (Integer.parseInt(shieldPower) > config.getMaxPowerCost() || Integer.parseInt(shieldPower) > faction.getPower())
+			int shieldCount = Util.getShieldCount(shieldstorage, shieldowner.getOwner());
+			if (shieldstorage.getBlockShieldBase() != null){
+				if (shieldCount > config.getMaxShieldCount()){
+					shieldowner.sendMessage("You have the maximum amount of Shields.");
+					shieldBlock.breakNaturally();
+					return;
+				}
+			}
+			
+			event.setLine(1, shieldowner.getOwner());
+			
+		} else if (shieldType == ShieldType.Faction) {
+			
+        	Faction faction = Board.getFactionAt(event.getBlock().getLocation());
+			shieldowner = new ShieldOwnerFaction(faction);
+			shieldPower = Integer.parseInt(line1);
+			Block Sponge = (Block)shieldBlock;	
+			
+			if (Sponge.getType() != Material.SPONGE) {
+				player.sendMessage("You can only create Factions Shields with a sponge.");
+				event.getBlock().breakNaturally();
+				return;
+			}
+			
+			if (faction.getId().equals("-2") || faction.getId().equals("-1")  || faction.getId().equals("0") ) {
+				player.sendMessage("You can only create Shields in land you own.");
+				event.getBlock().breakNaturally();
+				return;
+			} 
+			if (shieldPower < 1) {
+				player.sendMessage("Shield must have a power of greater than zero.");
+				event.getBlock().breakNaturally();
+				return;
+			}
+			
+			if (shieldPower > config.getMaxPowerCost() || shieldPower > faction.getPower())
 			{
-				//log.info("[BubbleShield] : " + "Not enough power to create Shield for player "+ player.getName());
-				fshieldowner.sendMessage("Not enough power to create Shield!");
+				shieldowner.sendMessage("Not enough power to create Shield!");
 				signBlock.breakNaturally();
 				Sponge.breakNaturally();
 				return;			
 			}
 			
-			int shieldCount = Util.getShieldCount(shieldstorage, fshieldowner.getId());
+			int shieldCount = Util.getShieldCount(shieldstorage, shieldowner.getOwner());
 			if (shieldstorage.getBlockShieldBase() != null){
 				if (shieldCount > config.getMaxShieldCount()){
 					//log.info("[BubbleShield] : " + fshieldowner.getId() + " Has the maximum amount of Shields.!");
-					fshieldowner.sendMessage("You have the maximum amount of Shields.");
-					Sponge.breakNaturally();
+					shieldowner.sendMessage("You have the maximum amount of Shields.");
+					shieldBlock.breakNaturally();
 					return;
 				}
 				else if (shieldCount == 0) {
@@ -359,22 +384,30 @@ public class ShieldListener implements Listener {
 				}
 			}
 			
-			Shield shield = Util.getShield(fshieldowner, shieldstorage);
+			faction.addPowerLoss(-shieldPower);
+			event.setLine(1, faction.getTag());
+		}
+		
+		event.setLine(2, Integer.toString(shieldPower));
+		event.setLine(3, Integer.toString(shieldPower));
+		
+		if (shieldowner != null) {
+			Shield shield = Util.getShield(shieldowner, shieldstorage);
 			
-			shield.setShieldPower(Integer.parseInt(shieldPower));
-			shield.setMaxShieldPower(Integer.parseInt(shieldPower));
+			shield.setShieldPower(shieldPower);
+			shield.setMaxShieldPower(shieldPower);
 						
-			ShieldBase shieldbase = new ShieldBase(Sponge, signBlock, shield, ShieldBlock.getWorld(),ShieldBlock.getX(),ShieldBlock.getY(),ShieldBlock.getZ());
+			ShieldBase shieldbase = new ShieldBase(shieldBlock, signBlock, shield, shieldBlock.getWorld(),shieldBlock.getX(),shieldBlock.getY(),shieldBlock.getZ());
 			
-			shieldbase.setShieldMaxPower(Integer.parseInt(shieldPower));
+			shieldbase.setType(shieldType);
+			shieldbase.setShieldMaxPower(shieldPower);
 			
 			shieldstorage.addBlockShieldBase(signBlock, shieldbase);
-			shieldstorage.addBlockShieldBase(ShieldBlock, shieldbase);
+			shieldstorage.addBlockShieldBase(shieldBlock, shieldbase);
 			
-			faction.addPowerLoss(-Integer.parseInt(shieldPower));
-		
-			log.info("[BubbleShield] : " + "Shield created by "+ player.getName() + " At location: " + shieldbase.getShieldBaseLocString() + " For Faction: " + shield.getOwner().getId() + " With power of: " + shieldPower);
-			fshieldowner.sendMessage("Shield Created");
+			
+			log.info("[BubbleShield] : " + "Shield created by "+ player.getName() + "  At location: " + shieldbase.getShieldBaseLocString() + "  For Faction/Player: " + shield.getShieldOwner().getOwner() + "  With power of: " + shieldPower);
+			shieldowner.sendMessage("Shield Created");
 			
 			try {
 				config.SaveShieldsToFile();
@@ -390,7 +423,6 @@ public class ShieldListener implements Listener {
 				e.printStackTrace();
 			}
 		}
-		
 	}
 	
 	/*
@@ -425,8 +457,10 @@ public class ShieldListener implements Listener {
 			shieldstorage.removeBlockShieldBase(shieldBase.sponge);
 			shieldstorage.removeBlockShieldBase(shieldBase.sign);
 			
-			Faction faction = Board.getFactionAt(event.getBlock().getLocation());
-			faction.addPowerLoss(maxpower);
+			if (shieldBase.getType() == ShieldType.Faction) {
+				Faction faction = Board.getFactionAt(event.getBlock().getLocation());
+				faction.addPowerLoss(maxpower);
+			}
 			
 			shield.owner.sendMessage("Shield Destroyed!");
 			
@@ -452,29 +486,30 @@ public class ShieldListener implements Listener {
 		if (shieldBase != null) {
 			Shield shield = shieldBase.shield;
 			ShieldOwnerFaction fShieldOwner = new ShieldOwnerFaction(Board.getFactionAt(shieldblock));
+			Sign sign = (Sign) shieldBase.sign.getState();
+			
 			shieldstorage.removeShields(fShieldOwner);
 			shieldstorage.removeBlockShieldBase(shieldBase.sponge);
 			shieldstorage.removeBlockShieldBase(shieldBase.sign);
 			shieldBase.destroy();
 			
 			int explosionpower = Math.round(shieldBase.shield.getShieldPowerMax() / 4);
-			//log.info("Explosion Power: " + explosionpower + "  MaxShield: " + shieldBase.shield.getShieldPowerMax());
 			
 			if (explosionpower >= 11)
 				explosionpower = 11;
 			else if (explosionpower <= 2)
 				explosionpower = 2;
 			
-			log.info("[BubbleShield] : " + "Shield exploded with Explosion Power of: " + explosionpower + " For Faction " + shieldBase.shield.owner.getId());
+			log.info("[BubbleShield] : " + "Shield exploded with Explosion Power of: " + explosionpower + " For Faction " + shieldBase.shield.getShieldOwner().getOwner());
 			
 			shieldblock.getWorld().createExplosion(shieldblock.getLocation(), explosionpower, true);
+			shield.owner.sendMessage("Shield Destroyed!");
 			shieldblock.breakNaturally();
 			
-			Faction faction = Board.getFactionAt(shieldblock);
-			shield.owner.sendMessage("Shield Destroyed!");
-			
-			Sign sign = (Sign) shieldBase.sign.getState();
-			faction.addPowerLoss(Integer.parseInt(sign.getLine(2)));
+			if (shieldBase.getType() == ShieldType.Faction) {
+				Faction faction = Board.getFactionAt(shieldblock);
+				faction.addPowerLoss(Integer.parseInt(sign.getLine(2)));
+			}
 			
 			try {
 				config.SaveShieldsToFile();

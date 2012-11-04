@@ -98,7 +98,7 @@ public class ShieldStorage {
 	
 	public boolean checkShieldOwnerExist(ShieldOwner shieldOwner, ShieldBase newShieldBase)
 	{
-		if (shields.get(shieldOwner).getOwner().equals(newShieldBase.shield.getOwner())) {
+		if (shields.get(shieldOwner).getShieldOwner().getOwner().equals(newShieldBase.shield.getShieldOwner().getOwner())) {
 			return true;
 		}
 		

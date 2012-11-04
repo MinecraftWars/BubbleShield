@@ -12,7 +12,9 @@ public class ShieldBase {
 	public int MaxPower;
 	public final int x;
 	public final int y;
-	public final int z;  
+	public final int z;
+	public enum ShieldType { Faction, Player };
+	public ShieldType type;
 	
 	@Override
 	public int hashCode() {
@@ -73,11 +75,24 @@ public class ShieldBase {
 	}
 	
 	public String getShieldBaseString(){
-		return this.shield.getOwner().getId() + "," + world.getName() + "," + x  + "," + y + "," + z;
+		return this.shield.getShieldOwner().getOwner() + "," + world.getName() + "," + x  + "," + y + "," + z + "," + this.type;
 	}
 	
 	@Override
 	public String toString(){
 		return world.getName() + ","+ x  + "," + y + "," + z;
+	}
+	
+	
+	public void setType(ShieldType type) {
+		this.type = type;
+	}
+	
+	public void setType(String string) {
+		this.type = ShieldType.valueOf(string);		
+	}
+	
+	public ShieldType getType() {
+		return this.type;
 	}
 }
