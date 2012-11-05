@@ -536,14 +536,27 @@ public class ShieldListener implements Listener {
 	}
 	
 	/* =========================================================================
-	 * 
+	 * Shield Area Block Break
 	 * 
 	 * 
 	 */
 	
 	@EventHandler
-	public void shieldAreaBlockBreak(BlockBreakEvent event) {
-		
+	public void shieldAreaBlockBreak(BlockBreakEvent event) {	
+	    if (event == null || event.isCancelled()) {
+	        return;
+	    }
+
+		ShieldBases = shieldstorage.GetShieldBases();
+	    Block block = event.getBlock();
+	    
+	    for (ShieldBase shieldBase : ShieldBases) {  	
+	    	if (blockProtected(block,shieldBase) && !event.getPlayer().getName().equals(shieldBase.shield.owner.getOwner())) {
+	            //log.info("[BubbleShield] : " + "Shield Damage Taken! " + shieldBase.getShieldBaseLocString());
+	    		if (!event.isCancelled()) event.setCancelled(true);
+	    		return;
+	    	}
+	    }
 	}
 	
 	/* =========================================================================
