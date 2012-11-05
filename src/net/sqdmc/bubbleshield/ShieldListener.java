@@ -535,6 +535,16 @@ public class ShieldListener implements Listener {
 		}		
 	}
 	
+	/* =========================================================================
+	 * 
+	 * 
+	 * 
+	 */
+	
+	@EventHandler
+	public void shieldAreaBlockBreak(BlockBreakEvent event) {
+		
+	}
 	
 	/* =========================================================================
 	 *  TIMERS
