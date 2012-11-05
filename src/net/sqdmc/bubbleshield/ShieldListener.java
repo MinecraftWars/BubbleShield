@@ -457,7 +457,10 @@ public class ShieldListener implements Listener {
 			shieldstorage.removeBlockShieldBase(shieldBase.sign);
 			shieldBase.destroy();
 			
-			int explosionpower = Math.round(shieldBase.shield.getShieldPowerMax() / 4);
+			Sign sign = (Sign) shieldBase.sign.getState();
+			String maxpower = sign.getLine(2);
+
+			int explosionpower = Math.round(Integer.parseInt(maxpower) / 4);
 			//log.info("Explosion Power: " + explosionpower + "  MaxShield: " + shieldBase.shield.getShieldPowerMax());
 			
 			if (explosionpower >= 11)
@@ -473,8 +476,7 @@ public class ShieldListener implements Listener {
 			Faction faction = Board.getFactionAt(shieldblock);
 			shield.owner.sendMessage("Shield Destroyed!");
 			
-			Sign sign = (Sign) shieldBase.sign.getState();
-			faction.addPowerLoss(Integer.parseInt(sign.getLine(2)));
+			faction.addPowerLoss(Integer.parseInt(maxpower));
 			
 			try {
 				config.SaveShieldsToFile();
