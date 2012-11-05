@@ -28,6 +28,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
@@ -550,11 +551,33 @@ public class ShieldListener implements Listener {
 		ShieldBases = shieldstorage.GetShieldBases();
 	    Block block = event.getBlock();
 	    
-	    for (ShieldBase shieldBase : ShieldBases) {  	
-	    	if (blockProtected(block,shieldBase) && !event.getPlayer().getName().equals(shieldBase.shield.owner.getOwner())) {
-	            //log.info("[BubbleShield] : " + "Shield Damage Taken! " + shieldBase.getShieldBaseLocString());
-	    		if (!event.isCancelled()) event.setCancelled(true);
-	    		return;
+	    for (ShieldBase shieldBase : ShieldBases) {  
+	    	if (!event.getPlayer().getName().equals(shieldBase.shield.owner.getOwner())) {
+	    		if (blockProtected(block,shieldBase) ) {//&& !event.getPlayer().getName().equals(shieldBase.shield.owner.getOwner())) {
+	    			//log.info("[BubbleShield] : " + "Shield Damage Taken! " + shieldBase.getShieldBaseLocString());
+	    			if (!event.isCancelled()) event.setCancelled(true);
+	    			return;
+	    		}
+	    	}
+	    }
+	}
+	
+	@EventHandler
+	public void shieldAreaBlockPlace(BlockPlaceEvent event) {	
+	    if (event == null || event.isCancelled()) {
+	        return;
+	    }
+
+		ShieldBases = shieldstorage.GetShieldBases();
+	    Block block = event.getBlock();
+	    
+	    for (ShieldBase shieldBase : ShieldBases) {  
+	    	if (!event.getPlayer().getName().equals(shieldBase.shield.owner.getOwner())) {
+	    		if (blockProtected(block,shieldBase) ) {//&& !event.getPlayer().getName().equals(shieldBase.shield.owner.getOwner())) {
+	    			//log.info("[BubbleShield] : " + "Shield Damage Taken! " + shieldBase.getShieldBaseLocString());
+	    			if (!event.isCancelled()) event.setCancelled(true);
+	    			return;
+	    		}
 	    	}
 	    }
 	}
