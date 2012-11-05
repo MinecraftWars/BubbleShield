@@ -551,10 +551,10 @@ public class ShieldListener implements Listener {
 		ShieldBases = shieldstorage.GetShieldBases();
 	    Block block = event.getBlock();
 	    
-	    for (ShieldBase shieldBase : ShieldBases) {  
-	    	if (!event.getPlayer().getName().equals(shieldBase.shield.owner.getOwner())) {
-	    		if (blockProtected(block,shieldBase) ) {//&& !event.getPlayer().getName().equals(shieldBase.shield.owner.getOwner())) {
-	    			//log.info("[BubbleShield] : " + "Shield Damage Taken! " + shieldBase.getShieldBaseLocString());
+	    for (ShieldBase shieldBase : ShieldBases) {  	    	
+	    	if (!event.getPlayer().getName().equals(shieldBase.shield.getShieldOwner().getOwner())) {
+	    		if (blockProtected(block,shieldBase) ) {
+	    			//log.info("[BubbleShield] : " + "Shield Block Attempt Break! " + shieldBase.getShieldBaseLocString());
 	    			if (!event.isCancelled()) event.setCancelled(true);
 	    			return;
 	    		}
@@ -572,9 +572,9 @@ public class ShieldListener implements Listener {
 	    Block block = event.getBlock();
 	    
 	    for (ShieldBase shieldBase : ShieldBases) {  
-	    	if (!event.getPlayer().getName().equals(shieldBase.shield.owner.getOwner())) {
-	    		if (blockProtected(block,shieldBase) ) {//&& !event.getPlayer().getName().equals(shieldBase.shield.owner.getOwner())) {
-	    			//log.info("[BubbleShield] : " + "Shield Damage Taken! " + shieldBase.getShieldBaseLocString());
+	    	if (!event.getPlayer().getName().equals(shieldBase.shield.getShieldOwner().getOwner())) {
+	    		if (blockProtected(block,shieldBase) ) {
+	    			//log.info("[BubbleShield] : " + "Shield Block Attempt Place! " + shieldBase.getShieldBaseLocString());
 	    			if (!event.isCancelled()) event.setCancelled(true);
 	    			return;
 	    		}
