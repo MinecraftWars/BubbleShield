@@ -451,6 +451,12 @@ public class ShieldListener implements Listener {
 				return;
 			}
 			
+			if (shieldBase.getType() == ShieldType.Player && player != Bukkit.getPlayer(sign.getLine(1))) {
+				player.sendMessage("Can not break shield unless you own it!");
+				event.setCancelled(true);
+				return;
+			}
+			
 			shieldBase.destroy();
 			ShieldOwnerFaction fShieldOwner = new ShieldOwnerFaction(Board.getFactionAt(block));
 			shieldstorage.removeShields(fShieldOwner);

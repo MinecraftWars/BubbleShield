@@ -315,26 +315,26 @@ public class BSConfiguration {
 				ShieldOwner shieldOwner = null;
 				
 				if (results[5].equalsIgnoreCase("Faction")) {
-					Faction faction = Factions.i.get(results[0].replace(" ", ""));
+					Faction faction = Factions.i.get(results[1].replace(" ", ""));
 					shieldOwner = new ShieldOwnerFaction(faction);
 				} else {
-					Player player = Bukkit.getPlayer(results[0].replace(" ", ""));
+					Player player = Bukkit.getPlayer(results[2].replace(" ", ""));
 					shieldOwner = new ShieldOwnerPlayer(player);
 				}
 		
 				Shield _shield = new Shield(shieldOwner);
 		
-				x = Integer.parseInt(results[2]);
-				y = Integer.parseInt(results[3]);
-				z = Integer.parseInt(results[4]);
+				x = Integer.parseInt(results[3]);
+				y = Integer.parseInt(results[4]);
+				z = Integer.parseInt(results[5]);
 
-				Block Sponge = Bukkit.getWorld(results[1]).getBlockAt(x, (y), z);
+				Block Sponge = Bukkit.getWorld(results[2]).getBlockAt(x, (y), z);
 				org.bukkit.Material _Sponge = Sponge.getType();
-				Block Sign = Bukkit.getWorld(results[1]).getBlockAt(x, (y+1), z);
+				Block Sign = Bukkit.getWorld(results[2]).getBlockAt(x, (y+1), z);
 				org.bukkit.Material _Sign = Sign.getType();
 			    
 				ShieldBase shieldBase = new ShieldBase( Sponge ,Sign , _shield, Bukkit.getWorld(results[1]),x , y, z);
-				shieldBase.setType(results[5]);
+				shieldBase.setType(results[0]);
 			
 				//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + "Sponge" + Sponge.getLocation().toString());
 				//log.info("[BubbleShield] : " + "LoadShieldFromFile() " + "Sign" + Sign.getLocation().toString());

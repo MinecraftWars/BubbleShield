@@ -75,7 +75,7 @@ public class ShieldBase {
 	}
 	
 	public String getShieldBaseString(){
-		return this.shield.getShieldOwner().getOwner() + "," + world.getName() + "," + x  + "," + y + "," + z + "," + this.type;
+		return this.type + "," + this.shield.getShieldOwner().getOwner() + "," + world.getName() + "," + x  + "," + y + "," + z;
 	}
 	
 	@Override
