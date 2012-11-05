@@ -311,7 +311,7 @@ public class BSConfiguration {
 			
 			if (result != null && !result.equals("") && result.length() > 1) {
 				String[] results = result.split(",");
-				
+
 				ShieldOwner shieldOwner = null;
 				
 				if (results[5].equalsIgnoreCase("Faction")) {
