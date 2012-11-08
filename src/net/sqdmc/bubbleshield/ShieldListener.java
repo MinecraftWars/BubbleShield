@@ -323,7 +323,11 @@ public class ShieldListener implements Listener {
 		Block signBlock = event.getBlock();
 		Block shieldBlock = signBlock.getRelative(BlockFace.DOWN);
 		
-		if (shieldType == ShieldType.Player) {
+		if (shieldType == ShieldType.Player && (
+				shieldBlock.getType() == Material.IRON_BLOCK ||
+				shieldBlock.getType() == Material.GOLD_BLOCK ||
+				shieldBlock.getType() == Material.DIAMOND_BLOCK ||
+				shieldBlock.getType() == Material.EMERALD_BLOCK )) {
 			
 			shieldowner = new ShieldOwnerPlayer(player);
 			shieldPower = Util.getShieldPowerFromBlock(shieldBlock);
@@ -340,7 +344,7 @@ public class ShieldListener implements Listener {
 			
 			event.setLine(1, shieldowner.getOwner());
 			
-		} else if (shieldType == ShieldType.Faction) {
+		} else if (shieldType == ShieldType.Faction && shieldBlock.getType() == Material.SPONGE) {
 			
         	Faction faction = Board.getFactionAt(event.getBlock().getLocation());
 			shieldowner = new ShieldOwnerFaction(faction);
@@ -366,7 +370,7 @@ public class ShieldListener implements Listener {
 			
 			if (shieldPower > config.getMaxPowerCost() || shieldPower > faction.getPower())
 			{
-				shieldowner.sendMessage("Not enough power to create Shield!");
+				player.sendMessage("Not enough power to create Shield!");
 				signBlock.breakNaturally();
 				Sponge.breakNaturally();
 				return;			
@@ -376,7 +380,7 @@ public class ShieldListener implements Listener {
 			if (shieldstorage.getBlockShieldBase() != null){
 				if (shieldCount > config.getMaxShieldCount()){
 					//log.info("[BubbleShield] : " + fshieldowner.getId() + " Has the maximum amount of Shields.!");
-					shieldowner.sendMessage("You have the maximum amount of Shields.");
+					player.sendMessage("You have the maximum amount of Shields.");
 					shieldBlock.breakNaturally();
 					return;
 				}
@@ -387,42 +391,45 @@ public class ShieldListener implements Listener {
 			
 			faction.addPowerLoss(-shieldPower);
 			event.setLine(1, faction.getTag());
+		} else {
+			player.sendMessage("Invalid Shield!");
+			signBlock.breakNaturally();
+			shieldBlock.breakNaturally();
+			return;			
 		}
 		
 		event.setLine(2, Integer.toString(shieldPower));
 		event.setLine(3, Integer.toString(shieldPower));
 		
-		if (shieldowner != null) {
-			Shield shield = Util.getShield(shieldowner, shieldstorage);
-			
-			shield.setShieldPower(shieldPower);
-			shield.setMaxShieldPower(shieldPower);
-						
-			ShieldBase shieldbase = new ShieldBase(shieldBlock, signBlock, shield, shieldBlock.getWorld(),shieldBlock.getX(),shieldBlock.getY(),shieldBlock.getZ());
-			
-			shieldbase.setType(shieldType);
-			shieldbase.setShieldMaxPower(shieldPower);
-			
-			shieldstorage.addBlockShieldBase(signBlock, shieldbase);
-			shieldstorage.addBlockShieldBase(shieldBlock, shieldbase);
-			
-			
-			log.info("[BubbleShield] : " + "Shield created by "+ player.getName() + "  At location: " + shieldbase.getShieldBaseLocString() + "  For Faction/Player: " + shield.getShieldOwner().getOwner() + "  With power of: " + shieldPower);
-			shieldowner.sendMessage("Shield Created");
-			
-			try {
-				config.SaveShieldsToFile();
-				config.loadDurabilityFromFile();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvalidConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		Shield shield = Util.getShield(shieldowner, shieldstorage);
+		
+		shield.setShieldPower(shieldPower);
+		shield.setMaxShieldPower(shieldPower);
+					
+		ShieldBase shieldbase = new ShieldBase(shieldBlock, signBlock, shield, shieldBlock.getWorld(),shieldBlock.getX(),shieldBlock.getY(),shieldBlock.getZ());
+		
+		shieldbase.setType(shieldType);
+		shieldbase.setShieldMaxPower(shieldPower);
+		
+		shieldstorage.addBlockShieldBase(signBlock, shieldbase);
+		shieldstorage.addBlockShieldBase(shieldBlock, shieldbase);
+		
+		
+		log.info("[BubbleShield] : " + "Shield created by "+ player.getName() + "  At location: " + shieldbase.getShieldBaseLocString() + "  For Faction/Player: " + shield.getShieldOwner().getOwner() + "  With power of: " + shieldPower);
+		shieldowner.sendMessage("Shield Created");
+		
+		try {
+			config.SaveShieldsToFile();
+			config.loadDurabilityFromFile();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
