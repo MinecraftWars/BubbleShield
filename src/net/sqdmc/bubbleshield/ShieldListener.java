@@ -420,7 +420,7 @@ public class ShieldListener implements Listener {
 		
 		try {
 			config.SaveShieldsToFile();
-			config.loadDurabilityFromFile();
+			config.LoadShieldFromFile();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
