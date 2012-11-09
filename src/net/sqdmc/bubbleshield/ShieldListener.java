@@ -311,6 +311,10 @@ public class ShieldListener implements Listener {
         		return;
         	}
 			shieldType = ShieldType.Faction;
+		} else if  (line0.equalsIgnoreCase("[f shield]") && (line1 == null || line1.equals(""))) {
+        	player.sendMessage("Invalid Faction shield.  Place the power of the shield on the second line!");
+        	event.getBlock().breakNaturally();
+        	return;
 		} else return; // not for us!
 		
 		if (!Util.isNumeric(line1) && shieldType == ShieldType.Faction) {
