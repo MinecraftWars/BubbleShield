@@ -327,8 +327,8 @@ public class ShieldListener implements Listener {
 				shieldBlock.getType() == Material.IRON_BLOCK ||
 				shieldBlock.getType() == Material.GOLD_BLOCK ||
 				shieldBlock.getType() == Material.DIAMOND_BLOCK ||
-				shieldBlock.getType() == Material.EMERALD_BLOCK )) {
-			
+				shieldBlock.getType() == Material.EMERALD_BLOCK ||
+				shieldBlock.getType() == Material.SPONGE)) {
 			shieldowner = new ShieldOwnerPlayer(player);
 			shieldPower = Util.getShieldPowerFromBlock(shieldBlock);
 			//Block block = (Block)shieldBlock;
@@ -344,8 +344,8 @@ public class ShieldListener implements Listener {
 			
 			try {
 				Faction faction = Board.getFactionAt(event.getBlock().getLocation());
-				shieldowner = new ShieldOwnerFaction(faction);
-				if (faction.getId() != "0" || faction.getId() != "-1" || faction.getId() != "-2") {
+				//shieldowner = new ShieldOwnerFaction(faction);
+				if (!faction.getId().equals("0")) {
 					shieldowner.sendMessage("You cannot create this shield here.");
 					shieldBlock.breakNaturally();
 					Bukkit.getWorld(shieldBlock.getWorld().getName()).createExplosion(shieldBlock.getLocation(), 1);
@@ -407,7 +407,6 @@ public class ShieldListener implements Listener {
 		} else {
 			player.sendMessage("Invalid Shield!");
 			signBlock.breakNaturally();
-			shieldBlock.breakNaturally();
 			return;			
 		}
 		
@@ -571,7 +570,7 @@ public class ShieldListener implements Listener {
 		ShieldBases = shieldstorage.GetShieldBases();
 	    Block block = event.getBlock();
 	    
-	    for (ShieldBase shieldBase : ShieldBases) {  	    	
+	    for (ShieldBase shieldBase : ShieldBases) { 
 	    	if (!event.getPlayer().getName().equals(shieldBase.shield.getShieldOwner().getOwner())) {
 	    		if (blockProtected(block,shieldBase) ) {
 	    			//log.info("[BubbleShield] : " + "Shield Block Attempt Break! " + shieldBase.getShieldBaseLocString());
@@ -579,6 +578,8 @@ public class ShieldListener implements Listener {
 	    			return;
 	    		}
 	    	}
+	    	if (!shieldBase.equals(null) && shieldBase.getType() == ShieldType.Faction)
+	    		return;
 	    }
 	}
 	
@@ -591,14 +592,16 @@ public class ShieldListener implements Listener {
 		ShieldBases = shieldstorage.GetShieldBases();
 	    Block block = event.getBlock();
 	    
-	    for (ShieldBase shieldBase : ShieldBases) {  
-	    	if (!event.getPlayer().getName().equals(shieldBase.shield.getShieldOwner().getOwner())) {
+	    for (ShieldBase shieldBase : ShieldBases) { 
+	    	if (!event.getPlayer().getName().equals(shieldBase.shield.getShieldOwner().getOwner()) ) {
 	    		if (blockProtected(block,shieldBase) ) {
 	    			//log.info("[BubbleShield] : " + "Shield Block Attempt Place! " + shieldBase.getShieldBaseLocString());
 	    			if (!event.isCancelled()) event.setCancelled(true);
 	    			return;
 	    		}
 	    	}
+	    	if (!shieldBase.equals(null) && shieldBase.getType() == ShieldType.Faction)
+	    		return;
 	    }
 	}
 	

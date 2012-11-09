@@ -1,20 +1,24 @@
 package net.sqdmc.bubbleshield;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class ShieldOwnerPlayer extends ShieldOwner {
 
 	public Player shieldOwner;
+	public OfflinePlayer shieldOwnerOff;
 	
 	public ShieldOwnerPlayer(String name) {
 		Player player = Bukkit.getPlayer(name);
 		
 		this.shieldOwner = player;
+		this.shieldOwnerOff = player;
 	}
 	
 	public ShieldOwnerPlayer(Player player) {
 		this.shieldOwner = player;
+		this.shieldOwnerOff = player;
 	}
 	
 	@Override
@@ -24,11 +28,14 @@ public class ShieldOwnerPlayer extends ShieldOwner {
 
 	public void setPlayer(Player player){
 		this.shieldOwner = player;
+		this.shieldOwnerOff = player;
 	}
 
 	@Override
 	public void sendMessage(String message) {
-		shieldOwner.sendMessage(message);
+		if (shieldOwner != null && shieldOwner.isOnline()) {
+			shieldOwner.sendMessage(message);
+		}
 	}
 
 	@Override
