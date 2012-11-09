@@ -573,7 +573,9 @@ public class ShieldListener implements Listener {
 		ShieldBases = shieldstorage.GetShieldBases();
 	    Block block = event.getBlock();
 	    
-	    for (ShieldBase shieldBase : ShieldBases) { 
+	    for (ShieldBase shieldBase : ShieldBases) {
+	    	if (!shieldBase.equals(null) && shieldBase.getType() == ShieldType.Faction)
+	    		return;
 	    	if (!event.getPlayer().getName().equals(shieldBase.shield.getShieldOwner().getOwner())) {
 	    		if (blockProtected(block,shieldBase) ) {
 	    			//log.info("[BubbleShield] : " + "Shield Block Attempt Break! " + shieldBase.getShieldBaseLocString());
@@ -581,8 +583,6 @@ public class ShieldListener implements Listener {
 	    			return;
 	    		}
 	    	}
-	    	if (!shieldBase.equals(null) && shieldBase.getType() == ShieldType.Faction)
-	    		return;
 	    }
 	}
 	
@@ -600,6 +600,8 @@ public class ShieldListener implements Listener {
 	    Block block = event.getBlock();
 	    
 	    for (ShieldBase shieldBase : ShieldBases) { 
+	    	if (!shieldBase.equals(null) && shieldBase.getType() == ShieldType.Faction)
+	    		return;
 	    	if (!event.getPlayer().getName().equals(shieldBase.shield.getShieldOwner().getOwner()) ) {
 	    		if (blockProtected(block,shieldBase) ) {
 	    			//log.info("[BubbleShield] : " + "Shield Block Attempt Place! " + shieldBase.getShieldBaseLocString());
@@ -607,8 +609,6 @@ public class ShieldListener implements Listener {
 	    			return;
 	    		}
 	    	}
-	    	if (!shieldBase.equals(null) && shieldBase.getType() == ShieldType.Faction)
-	    		return;
 	    }
 	}
 	
