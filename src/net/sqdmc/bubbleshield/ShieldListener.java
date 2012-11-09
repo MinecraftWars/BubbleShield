@@ -464,15 +464,15 @@ public class ShieldListener implements Listener {
 			int maxpower = Integer.parseInt(sign.getLine(2));
 			int pow = Integer.parseInt(sign.getLine(3));
 			
-			if (pow != maxpower) {
-				//shield.owner.sendMessage("Can not break shield unless it is fully charged!");
-				player.sendMessage("Can not break shield unless it is fully charged!");
+			if (shieldBase.getType() == ShieldType.Player && player != Bukkit.getPlayer(sign.getLine(1))) {
+				player.sendMessage("Can not break shield unless you own it!");
 				event.setCancelled(true);
 				return;
 			}
 			
-			if (shieldBase.getType() == ShieldType.Player && player != Bukkit.getPlayer(sign.getLine(1))) {
-				player.sendMessage("Can not break shield unless you own it!");
+			if (pow != maxpower) {
+				//shield.owner.sendMessage("Can not break shield unless it is fully charged!");
+				player.sendMessage("Can not break shield unless it is fully charged!");
 				event.setCancelled(true);
 				return;
 			}
