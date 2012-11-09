@@ -63,7 +63,7 @@ public class Util {
 	
 	public static int getShieldPowerFromBlock(Block block, BSConfiguration config) {
 		if (block.getType() == Material.SPONGE)
-			return config.getDiamondBlockDurability();
+			return config.getSpongeBlockDurability();
 		else if (block.getType() == Material.EMERALD_BLOCK)
 			return config.getEmeraldBlockDurability();
 		else if (block.getType() == Material.DIAMOND_BLOCK)
@@ -71,7 +71,7 @@ public class Util {
 		else if (block.getType() == Material.GOLD_BLOCK)
 			return config.getGoldBlockDurability();
 		else if (block.getType() == Material.IRON_BLOCK)
-			return config.getSpongeBlockDurability();
+			return config.getIronBlockDurability();
 
 		return 0;
 	}
