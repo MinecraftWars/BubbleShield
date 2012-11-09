@@ -42,10 +42,10 @@ public class BSConfiguration {
 	private YamlConfiguration shieldsDB = new YamlConfiguration();
 	
 	private int ProtectionRadius = 16;
-	private long RegenTime = 6000L;
+	private long RegenTime = 16000L;
 	private int Durability = 100;
 	private int AffectedBlockCountMax = 2;
-	private int MaxWildShieldCount = 1;
+	private int MaxWildShieldCount = 2;
 	private int MaxFactionShieldCount = 1;
 	
 	private int IronBlockDurability = 10;
