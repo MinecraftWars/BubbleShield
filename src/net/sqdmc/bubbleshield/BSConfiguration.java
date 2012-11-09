@@ -59,6 +59,8 @@ public class BSConfiguration {
 	private boolean bUseWildShield = true;
 	private boolean bUseFactionShield = true;
 	
+	private boolean bBuildShieldsInShield = false;
+	
 	public BSConfiguration(BubbleShield plugin) {
 		this.plugin = plugin;
 		pluginName = BubbleShield.getPluginName();
@@ -113,12 +115,14 @@ public class BSConfiguration {
 			RegenTime = bukkitConfig.getLong("RegenTime.Time", RegenTime);
 			Durability = bukkitConfig.getInt("MaxDurability.Amount", Durability);
 			AffectedBlockCountMax = bukkitConfig.getInt("MaxHitBlocks.Amount", AffectedBlockCountMax);
+			bBuildShieldsInShield = bukkitConfig.getBoolean("BuildShieldsInShield.Allow", bBuildShieldsInShield);
+						
 			MaxWildShieldCount = bukkitConfig.getInt("MaxShieldCount.Wild", MaxWildShieldCount);
 			MaxFactionShieldCount = bukkitConfig.getInt("MaxShieldCount.Faction", MaxFactionShieldCount);
 			
 			bUseWildShield = bukkitConfig.getBoolean("ShieldUse.Wilderness", bUseWildShield);
 			bUseFactionShield = bukkitConfig.getBoolean("ShieldUse.Factions", bUseFactionShield);
-			
+						
 			IronBlockDurability = bukkitConfig.getInt("BlockDurability.Iron", IronBlockDurability);
 			GoldBlockDurability = bukkitConfig.getInt("BlockDurability.Gold", GoldBlockDurability);
 			DiamondBlockDurability = bukkitConfig.getInt("BlockDurability.Diamond", DiamondBlockDurability);
@@ -138,6 +142,7 @@ public class BSConfiguration {
 		write("RegenTime.Time", RegenTime);
 		write("MaxDurability.Amount", Durability);
 		write("MaxHitBlocks.Amount", AffectedBlockCountMax);
+		write("BuildShieldsInShield.Allow", bBuildShieldsInShield);
 		write("MaxShieldCount.Wild", MaxWildShieldCount);
 		write("MaxShieldCount.Faction", MaxFactionShieldCount);
 		
@@ -268,6 +273,10 @@ public class BSConfiguration {
 	
 	public boolean getUseFactionShield() {
 		return bUseFactionShield;
+	}
+	
+	public boolean getBuildShieldsInShield() {
+		return bBuildShieldsInShield;
 	}
 	
 	/* ==========================================================================================

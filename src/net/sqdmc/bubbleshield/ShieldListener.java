@@ -327,6 +327,15 @@ public class ShieldListener implements Listener {
 		Block signBlock = event.getBlock();
 		Block shieldBlock = signBlock.getRelative(BlockFace.DOWN);
 		
+		ShieldBases = shieldstorage.GetShieldBases();
+		for (ShieldBase shieldBase : ShieldBases) {
+			if (blockProtected(shieldBlock, shieldBase) && !config.getBuildShieldsInShield()) {
+				player.sendMessage("Can not create a shield within a shield.");
+				event.getBlock().breakNaturally();
+				return;
+			}
+		}
+		
 		if (shieldType == ShieldType.Player && (
 				shieldBlock.getType() == Material.IRON_BLOCK ||
 				shieldBlock.getType() == Material.GOLD_BLOCK ||
