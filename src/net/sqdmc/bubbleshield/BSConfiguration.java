@@ -45,7 +45,19 @@ public class BSConfiguration {
 	private long RegenTime = 6000L;
 	private int Durability = 100;
 	private int AffectedBlockCountMax = 2;
-	private int MaxShieldCount = 1;
+	private int MaxWildShieldCount = 1;
+	private int MaxFactionShieldCount = 1;
+	
+	private int IronBlockDurability = 10;
+	private int GoldBlockDurability = 20;
+	private int DiamondBlockDurability = 30;
+	private int EmeraldBlockDurability = 40;
+	private int SpongeBlockDurability = 50;
+	
+	private boolean bUseShieldBuildProtection = true;
+	
+	private boolean bUseWildShield = true;
+	private boolean bUseFactionShield = true;
 	
 	public BSConfiguration(BubbleShield plugin) {
 		this.plugin = plugin;
@@ -96,11 +108,22 @@ public class BSConfiguration {
 		try {
 			bukkitConfig.load(configFile);
 			
-			ProtectionRadius = bukkitConfig.getInt("ProtectionRadius.Distance", ProtectionRadius);
+			ProtectionRadius = bukkitConfig.getInt("Protection.Distance", ProtectionRadius);
+			bUseShieldBuildProtection = bukkitConfig.getBoolean("Protection.Build", bUseShieldBuildProtection);
 			RegenTime = bukkitConfig.getLong("RegenTime.Time", RegenTime);
 			Durability = bukkitConfig.getInt("MaxDurability.Amount", Durability);
 			AffectedBlockCountMax = bukkitConfig.getInt("MaxHitBlocks.Amount", AffectedBlockCountMax);
-			MaxShieldCount = bukkitConfig.getInt("MaxShieldCount.Amount", MaxShieldCount);
+			MaxWildShieldCount = bukkitConfig.getInt("MaxShieldCount.Wild", MaxWildShieldCount);
+			MaxFactionShieldCount = bukkitConfig.getInt("MaxShieldCount.Faction", MaxFactionShieldCount);
+			
+			bUseWildShield = bukkitConfig.getBoolean("ShieldUse.Wilderness", bUseWildShield);
+			bUseFactionShield = bukkitConfig.getBoolean("ShieldUse.Factions", bUseFactionShield);
+			
+			IronBlockDurability = bukkitConfig.getInt("BlockDurability.Iron", IronBlockDurability);
+			GoldBlockDurability = bukkitConfig.getInt("BlockDurability.Gold", GoldBlockDurability);
+			DiamondBlockDurability = bukkitConfig.getInt("BlockDurability.Diamond", DiamondBlockDurability);
+			EmeraldBlockDurability = bukkitConfig.getInt("BlockDurability.Emerald", EmeraldBlockDurability);
+			SpongeBlockDurability = bukkitConfig.getInt("BlockDurability.Sponge", SpongeBlockDurability);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -110,11 +133,22 @@ public class BSConfiguration {
 	private void writeDefault() {
 		write("Version", BubbleShield.getVersion());
 		
-		write("ProtectionRadius.Distance", ProtectionRadius);
+		write("Protection.Distance", ProtectionRadius);
+		write("Protection.Build",bUseShieldBuildProtection);
 		write("RegenTime.Time", RegenTime);
 		write("MaxDurability.Amount", Durability);
 		write("MaxHitBlocks.Amount", AffectedBlockCountMax);
-		write("MaxShieldCount.Amount", MaxShieldCount);
+		write("MaxShieldCount.Wild", MaxWildShieldCount);
+		write("MaxShieldCount.Faction", MaxFactionShieldCount);
+		
+		write("ShieldUse.Wilderness", bUseWildShield);
+		write("ShieldUse.Factions", bUseFactionShield);
+		
+		write("BlockDurability.Iron", IronBlockDurability);
+		write("BlockDurability.Gold", GoldBlockDurability);
+		write("BlockDurability.Diamond", DiamondBlockDurability);
+		write("BlockDurability.Emerald", EmeraldBlockDurability);
+		write("BlockDurability.Sponge", SpongeBlockDurability);
 
 		loadData();
 	}
@@ -196,8 +230,44 @@ public class BSConfiguration {
 		return ProtectionRadius;
 	}
 	
-	public int getMaxShieldCount() {
-		return MaxShieldCount;
+	public int getMaxWildShieldCount() {
+		return MaxWildShieldCount;
+	}
+	
+	public int getMaxFactionShieldCount() {
+		return MaxFactionShieldCount;
+	}
+	
+	public int getIronBlockDurability() {
+		return IronBlockDurability;
+	}
+	
+	public int getGoldBlockDurability() {
+		return GoldBlockDurability;
+	}
+	
+	public int getDiamondBlockDurability() {
+		return DiamondBlockDurability;
+	}
+	
+	public int getEmeraldBlockDurability() {
+		return EmeraldBlockDurability;
+	}
+	
+	public int getSpongeBlockDurability() {
+		return SpongeBlockDurability;
+	}
+	
+	public boolean getUseShieldBuildProtection() {
+		return bUseShieldBuildProtection;
+	}
+	
+	public boolean getUseWildShield() {
+		return bUseWildShield;
+	}
+	
+	public boolean getUseFactionShield() {
+		return bUseFactionShield;
 	}
 	
 	/* ==========================================================================================

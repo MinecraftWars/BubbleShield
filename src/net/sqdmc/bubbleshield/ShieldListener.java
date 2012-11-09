@@ -300,13 +300,13 @@ public class ShieldListener implements Listener {
 		String line1 = event.getLine(1);
 		
 		if (line0.equalsIgnoreCase("[shield]")) {
-        	if (!player.hasPermission("bubbleshield.create.player")) {
+        	if (!player.hasPermission("bubbleshield.create.player") || !config.getUseWildShield()) {
         		player.sendMessage("You do not have permission to create this shield.");
         		return;
         	}
         	shieldType = ShieldType.Player;			
-		} else if (line0.equalsIgnoreCase("[f shield]") && (line1 != null && !line1.equals("") )) {
-        	if (!player.hasPermission("bubbleshield.create.faction")) {
+		} else if (line0.equalsIgnoreCase("[f shield]") && line1 != null && !line1.equals("")) {
+        	if (!player.hasPermission("bubbleshield.create.faction") || !config.getUseFactionShield()) {
         		player.sendMessage("You do not have permission to create this shield.");
         		return;
         	}
@@ -330,12 +330,12 @@ public class ShieldListener implements Listener {
 				shieldBlock.getType() == Material.EMERALD_BLOCK ||
 				shieldBlock.getType() == Material.SPONGE)) {
 			shieldowner = new ShieldOwnerPlayer(player);
-			shieldPower = Util.getShieldPowerFromBlock(shieldBlock);
+			shieldPower = Util.getShieldPowerFromBlock(shieldBlock, config);
 			//Block block = (Block)shieldBlock;
 			
 			int shieldCount = Util.getShieldCount(shieldstorage, shieldowner.getOwner());
 			if (shieldstorage.getBlockShieldBase() != null){
-				if (shieldCount > config.getMaxShieldCount()){
+				if (shieldCount > config.getMaxWildShieldCount()){
 					shieldowner.sendMessage("You have the maximum amount of Shields.");
 					shieldBlock.breakNaturally();
 					return;
@@ -391,7 +391,7 @@ public class ShieldListener implements Listener {
 			
 			int shieldCount = Util.getShieldCount(shieldstorage, shieldowner.getOwner());
 			if (shieldstorage.getBlockShieldBase() != null){
-				if (shieldCount > config.getMaxShieldCount()){
+				if (shieldCount > config.getMaxFactionShieldCount()){
 					//log.info("[BubbleShield] : " + fshieldowner.getId() + " Has the maximum amount of Shields.!");
 					player.sendMessage("You have the maximum amount of Shields.");
 					shieldBlock.breakNaturally();
@@ -471,7 +471,6 @@ public class ShieldListener implements Listener {
 			}
 			
 			if (pow != maxpower) {
-				//shield.owner.sendMessage("Can not break shield unless it is fully charged!");
 				player.sendMessage("Can not break shield unless it is fully charged!");
 				event.setCancelled(true);
 				return;
@@ -566,6 +565,10 @@ public class ShieldListener implements Listener {
 	    if (event == null || event.isCancelled()) {
 	        return;
 	    }
+	    
+	    if (!config.getUseShieldBuildProtection()) {
+	    	return;
+	    }
 
 		ShieldBases = shieldstorage.GetShieldBases();
 	    Block block = event.getBlock();
@@ -587,6 +590,10 @@ public class ShieldListener implements Listener {
 	public void shieldAreaBlockPlace(BlockPlaceEvent event) {	
 	    if (event == null || event.isCancelled()) {
 	        return;
+	    }
+	    
+	    if (!config.getUseShieldBuildProtection()) {
+	    	return;
 	    }
 
 		ShieldBases = shieldstorage.GetShieldBases();

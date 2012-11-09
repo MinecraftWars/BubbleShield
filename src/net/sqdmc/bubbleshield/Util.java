@@ -61,17 +61,17 @@ public class Util {
 		return count;
 	}
 	
-	public static int getShieldPowerFromBlock(Block block) {
+	public static int getShieldPowerFromBlock(Block block, BSConfiguration config) {
 		if (block.getType() == Material.SPONGE)
-			return 50;
+			return config.getDiamondBlockDurability();
 		else if (block.getType() == Material.EMERALD_BLOCK)
-			return 40;
+			return config.getEmeraldBlockDurability();
 		else if (block.getType() == Material.DIAMOND_BLOCK)
-			return 30;
+			return config.getDiamondBlockDurability();
 		else if (block.getType() == Material.GOLD_BLOCK)
-			return 20;
+			return config.getGoldBlockDurability();
 		else if (block.getType() == Material.IRON_BLOCK)
-			return 10;
+			return config.getIronBlockDurability();
 
 		return 0;
 	}
