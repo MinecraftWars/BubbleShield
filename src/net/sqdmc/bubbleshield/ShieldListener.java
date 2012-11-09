@@ -478,13 +478,13 @@ public class ShieldListener implements Listener {
 			int maxpower = Integer.parseInt(sign.getLine(2));
 			int pow = Integer.parseInt(sign.getLine(3));
 			
-			if (shieldBase.getType() == ShieldType.Player && player != Bukkit.getPlayer(sign.getLine(1))) {
+			if (shieldBase.getType() == ShieldType.Player && player != Bukkit.getPlayer(sign.getLine(1)) && !player.hasPermission("bubbleshield.admin")) {
 				player.sendMessage("Can not break shield unless you own it!");
 				event.setCancelled(true);
 				return;
 			}
 			
-			if (pow != maxpower) {
+			if (pow != maxpower && !player.hasPermission("bubbleshield.admin")) {
 				player.sendMessage("Can not break shield unless it is fully charged!");
 				event.setCancelled(true);
 				return;
@@ -580,7 +580,7 @@ public class ShieldListener implements Listener {
 	        return;
 	    }
 	    
-	    if (!config.getUseShieldBuildProtection()) {
+	    if (!config.getUseShieldBuildProtection() || event.getPlayer().hasPermission("bubbleshield.admin")) {
 	    	return;
 	    }
 
@@ -606,7 +606,7 @@ public class ShieldListener implements Listener {
 	        return;
 	    }
 	    
-	    if (!config.getUseShieldBuildProtection()) {
+	    if (!config.getUseShieldBuildProtection() || event.getPlayer().hasPermission("bubbleshield.admin")) {
 	    	return;
 	    }
 
