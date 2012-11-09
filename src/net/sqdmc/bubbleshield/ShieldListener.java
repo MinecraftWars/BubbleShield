@@ -342,6 +342,19 @@ public class ShieldListener implements Listener {
 				}
 			}
 			
+			try {
+				Faction faction = Board.getFactionAt(event.getBlock().getLocation());
+				shieldowner = new ShieldOwnerFaction(faction);
+				if (faction.getId() != "0" || faction.getId() != "-1" || faction.getId() != "-2") {
+					shieldowner.sendMessage("You cannot create this shield here.");
+					shieldBlock.breakNaturally();
+					Bukkit.getWorld(shieldBlock.getWorld().getName()).createExplosion(shieldBlock.getLocation(), 1);
+					return;
+				}
+			} catch (Exception e) {
+				log.info("[BubbleShield] : Create shield in Faction Null Error...");
+			}
+			
 			event.setLine(1, shieldowner.getOwner());
 			
 		} else if (shieldType == ShieldType.Faction && shieldBlock.getType() == Material.SPONGE) {
