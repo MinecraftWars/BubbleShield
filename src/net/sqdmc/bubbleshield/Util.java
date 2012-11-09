@@ -71,7 +71,7 @@ public class Util {
 		else if (block.getType() == Material.GOLD_BLOCK)
 			return config.getGoldBlockDurability();
 		else if (block.getType() == Material.IRON_BLOCK)
-			return config.getIronBlockDurability();
+			return config.getSpongeBlockDurability();
 
 		return 0;
 	}
