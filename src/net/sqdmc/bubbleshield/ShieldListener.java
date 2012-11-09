@@ -445,8 +445,9 @@ public class ShieldListener implements Listener {
 		}
 	}
 	
-	/*
+	/* ================================================================
 	 * DESTROY
+	 * 
 	 */
 	
 	@EventHandler
@@ -527,7 +528,7 @@ public class ShieldListener implements Listener {
 			else if (explosionpower <= 2)
 				explosionpower = 2;
 			
-			log.info("[BubbleShield] : " + "Shield exploded with Explosion Power of: " + explosionpower + " For Faction " + shieldBase.shield.getShieldOwner().getOwner());
+			log.info("[BubbleShield] : " + "Shield exploded with Explosion Power of: " + explosionpower + " For Faction/Player " + shieldBase.shield.getShieldOwner().getOwner());
 			
 			shieldblock.getWorld().createExplosion(shieldblock.getLocation(), explosionpower, true);
 			shield.owner.sendMessage("Shield Destroyed!");
