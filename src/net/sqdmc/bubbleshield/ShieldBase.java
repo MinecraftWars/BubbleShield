@@ -18,10 +18,7 @@ public class ShieldBase {
 	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((sponge == null) ? 0 : sponge.getLocation().hashCode());
-		return result;
+		return (sponge == null) ? 0 : sponge.getLocation().hashCode();
 	}
 
 	public boolean equals(Object obj) {
