@@ -12,7 +12,6 @@ public class HitTimer extends TimerTask  {
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		plugin.getListener().shieldstorage.affectedBlockCount = 0;
 	}
 
