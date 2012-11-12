@@ -51,12 +51,10 @@ public class ShieldListener implements Listener {
 	public ShieldListener(BubbleShield plugin) {
 		this.plugin = plugin;
 		config = plugin.getBSConfig();
-		if (shieldstorage != null)
-		{
+		if (shieldstorage != null) {
 			
 		}
-		else
-		{
+		else {
 			log.info("[BubbleShield] : Creating new shieldstorage...");
 			shieldstorage = new ShieldStorage();
 		}
