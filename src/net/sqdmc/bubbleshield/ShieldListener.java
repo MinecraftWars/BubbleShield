@@ -683,7 +683,7 @@ public class ShieldListener implements Listener {
 	 * 
 	 * @return the HashMap containing all saved durability timers
 	 */
-	public HashMap<Integer, Timer> getObsidianTimer() {
+	public HashMap<Integer, Timer> getShieldTimer() {
 		return shieldTimer;
 	}
 
