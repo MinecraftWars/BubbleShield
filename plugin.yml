@@ -1,6 +1,6 @@
 name: BubbleShield
 author: squidicuz
-version: 0.9.91
+version: 0.9.92
 main: net.sqdmc.bubbleshield.BubbleShield
 depend: [Factions]
 
