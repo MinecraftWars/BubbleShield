@@ -18,7 +18,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
@@ -397,8 +396,8 @@ public class BSConfiguration {
 					Faction faction = Factions.i.get(results[1].replace(" ", ""));
 					shieldOwner = new ShieldOwnerFaction(faction);
 				} else if (results[0].equalsIgnoreCase("Player")) {
-					Player player = Bukkit.getPlayer(results[1].replace(" ", ""));
-					shieldOwner = new ShieldOwnerPlayer(player);
+					//Player player = Bukkit.getOfflinePlayer(results[1].replace(" ", ""));
+					shieldOwner = new ShieldOwnerPlayer(results[1].replace(" ", ""));
 				}
 		
 				Shield _shield = new Shield(shieldOwner);

@@ -6,39 +6,35 @@ import org.bukkit.entity.Player;
 
 public class ShieldOwnerPlayer extends ShieldOwner {
 
-	public Player shieldOwner;
-	public OfflinePlayer shieldOwnerOff;
+	private String shieldOwner;
 	
 	public ShieldOwnerPlayer(String name) {
-		Player player = Bukkit.getPlayer(name);
-		OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(name);
-		
-		this.shieldOwner = player;
-		this.shieldOwnerOff = offPlayer;
+		this.shieldOwner = name;
 	}
 	
 	public ShieldOwnerPlayer(Player player) {
-		this.shieldOwner = player;
-		this.shieldOwnerOff = player;
+		this.shieldOwner = player.getName();
+	}
+	
+	public ShieldOwnerPlayer(OfflinePlayer player) {
+		this.shieldOwner = player.getName();
 	}
 	
 	@Override
 	public String getOwner() {
-		if (this.shieldOwnerOff.isOnline())
-			return this.shieldOwner.getName();
-		else
-			return this.shieldOwnerOff.getName();
+		return this.shieldOwner;
 	}
 
 	public void setPlayer(Player player){
-		this.shieldOwner = player;
-		this.shieldOwnerOff = player;
+		this.shieldOwner = player.getName();
 	}
 
 	@Override
 	public void sendMessage(String message) {
-		if (this.shieldOwner != null && this.shieldOwnerOff.isOnline()) {
-			this.shieldOwner.sendMessage(message);
+		Player player = Bukkit.getPlayer(shieldOwner);
+		
+		if (player != null && player.isOnline()) {
+			player.sendMessage(message);
 		}
 	}
 
@@ -66,6 +62,6 @@ public class ShieldOwnerPlayer extends ShieldOwner {
 	
 	@Override
 	public String toString() {
-		return this.shieldOwner.getName();
+		return this.shieldOwner;
 	}
 }
