@@ -53,7 +53,7 @@ public class Util {
 	public static int getShieldCount(ShieldStorage shieldstorage, String owner) {
 		int count = 0;
 		for (ShieldBase shieldbase : shieldstorage.GetShieldBases()) {
-			if (shieldbase.shield.getShieldOwner().getOwner() == owner) {
+			if (shieldbase.shield.getShieldOwner() != null && shieldbase.shield.getShieldOwner().getOwner() == owner) {
 				count++;
 			}
 		}

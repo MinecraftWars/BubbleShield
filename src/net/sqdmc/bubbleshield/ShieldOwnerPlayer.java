@@ -11,9 +11,10 @@ public class ShieldOwnerPlayer extends ShieldOwner {
 	
 	public ShieldOwnerPlayer(String name) {
 		Player player = Bukkit.getPlayer(name);
+		OfflinePlayer offPlayer = Bukkit.getOfflinePlayer(name);
 		
 		this.shieldOwner = player;
-		this.shieldOwnerOff = player;
+		this.shieldOwnerOff = offPlayer;
 	}
 	
 	public ShieldOwnerPlayer(Player player) {
@@ -23,7 +24,10 @@ public class ShieldOwnerPlayer extends ShieldOwner {
 	
 	@Override
 	public String getOwner() {
-		return shieldOwner.getName();
+		if (this.shieldOwnerOff.isOnline())
+			return this.shieldOwner.getName();
+		else
+			return this.shieldOwnerOff.getName();
 	}
 
 	public void setPlayer(Player player){
@@ -33,8 +37,8 @@ public class ShieldOwnerPlayer extends ShieldOwner {
 
 	@Override
 	public void sendMessage(String message) {
-		if (shieldOwner != null && shieldOwner.isOnline()) {
-			shieldOwner.sendMessage(message);
+		if (this.shieldOwner != null && this.shieldOwnerOff.isOnline()) {
+			this.shieldOwner.sendMessage(message);
 		}
 	}
 
@@ -62,6 +66,6 @@ public class ShieldOwnerPlayer extends ShieldOwner {
 	
 	@Override
 	public String toString() {
-		return shieldOwner.getName();
+		return this.shieldOwner.getName();
 	}
 }
