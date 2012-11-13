@@ -525,10 +525,17 @@ public class ShieldListener implements Listener {
 		ShieldBase shieldBase = shieldstorage.getBlockShieldBase().get(shieldblock);	
 		if (shieldBase != null) {
 			Shield shield = shieldBase.shield;
-			ShieldOwnerFaction fShieldOwner = new ShieldOwnerFaction(Board.getFactionAt(shieldblock));
 			Sign sign = (Sign) shieldBase.sign.getState();
+			ShieldOwner shieldOwner = null;
 			
-			shieldstorage.removeShields(fShieldOwner);
+			if (shieldBase.getType() == ShieldType.Player) {
+				shieldOwner = new ShieldOwnerPlayer(Bukkit.getPlayer(sign.getLine(1)));
+			} else if (shieldBase.getType() == ShieldType.Faction) {
+				Faction faction = Board.getFactionAt(shieldblock);
+				shieldOwner = new ShieldOwnerFaction(faction);
+			}
+			
+			shieldstorage.removeShields(shieldOwner);
 			shieldstorage.removeBlockShieldBase(shieldBase.sponge);
 			shieldstorage.removeBlockShieldBase(shieldBase.sign);
 			shieldBase.destroy();
