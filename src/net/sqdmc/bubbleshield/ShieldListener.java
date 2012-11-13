@@ -468,6 +468,7 @@ public class ShieldListener implements Listener {
 		if (shieldBase != null) {
 			Shield shield = shieldBase.shield;
 			Player player = event.getPlayer();
+			ShieldOwner shieldOwner = null;
 			
 			Location signLoc = new Location(shieldBase.world, shieldBase.x, (shieldBase.y+1), shieldBase.z);
 			Block signBlock = signLoc.getBlock();
@@ -488,16 +489,18 @@ public class ShieldListener implements Listener {
 				return;
 			}
 			
-			shieldBase.destroy();
-			ShieldOwnerFaction fShieldOwner = new ShieldOwnerFaction(Board.getFactionAt(block));
-			shieldstorage.removeShields(fShieldOwner);
-			shieldstorage.removeBlockShieldBase(shieldBase.sponge);
-			shieldstorage.removeBlockShieldBase(shieldBase.sign);
-			
-			if (shieldBase.getType() == ShieldType.Faction) {
+			if (shieldBase.getType() == ShieldType.Player) {
+				shieldOwner = new ShieldOwnerPlayer(Bukkit.getPlayer(sign.getLine(1)));
+			} else if (shieldBase.getType() == ShieldType.Faction) {
 				Faction faction = Board.getFactionAt(event.getBlock().getLocation());
+				shieldOwner = new ShieldOwnerFaction(faction);
 				faction.addPowerLoss(maxpower);
 			}
+			
+			shieldstorage.removeShields(shieldOwner);
+			shieldstorage.removeBlockShieldBase(shieldBase.sponge);
+			shieldstorage.removeBlockShieldBase(shieldBase.sign);
+			shieldBase.destroy();
 			
 			shield.owner.sendMessage("Shield Destroyed!");
 			
